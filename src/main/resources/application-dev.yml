@@ -35,8 +35,9 @@ spring:
           max-wait: -1
 
 oauth2:
-  jwkPath: "example.com.jks"
-  jwkAlias: "example.com"
-  jwkPass: "example.com"
-  issuer: "http://localhost:9000"
+  jwkPath: "www.wlngo.top.jks"
+  jwkAlias: "www.wlngo.top"
+  jwkPass: "www.wlngo.top"
+  issuer: "https://wlngo.top:9400"
+  domainName: "https://*.wlngo.top:[*]"
 
