@@ -31,7 +31,6 @@ jobs:
         image: redis:latest
         ports:
           - 6379:6379  # 映射 Redis 服务的端口
-          -
     container: maven:3.8.5-openjdk-17
     steps:
       - uses: actions/checkout@v4
