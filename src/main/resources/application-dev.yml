@@ -19,6 +19,7 @@ spring:
   data:
     redis:
       host: redis
+      password: admin
       #60s time out
       timeout: 60000
       client-type: jedis
@@ -32,3 +33,4 @@ spring:
           min-idle: 0
           # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
           max-wait: -1
+

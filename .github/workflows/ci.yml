@@ -33,9 +33,7 @@ jobs:
         ports:
           - 6379:6379  # 映射 Redis 服务的端口
         options: >-
-          --health-check-interval 5s
-          --health-check-timeout 3s
-          --health-check-retries 5
+          --requirepass "admin"
 
     container: maven:3.8.5-openjdk-17
     steps:
