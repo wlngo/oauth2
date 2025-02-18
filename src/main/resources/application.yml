@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    hikari:
+      pool-name: DateHikariCP
+      minimum-idle: 5
+      idle-timeout: 100000
+      maximum-pool-size: 10
+      auto-commit: true
+      max-lifetime: 120000
+      connection-timeout: 30000
+  #max files
+  servlet:
+    multipart:
+      max-file-size: 600MB
+      max-request-size: 600MB
+  application:
+    name: oauth2
+  # profiles
+  profiles:
+    active: dev
+server:
+  servlet:
+    context-path: /${spring.application.name}
+  tomcat:
+    #    nginx parameter
+    remoteip:
+      protocol-header: X-Forwarded-Proto
+      remote-ip-header: X-FORWARDED-FOR
+      port-header: X-Forwarded-Port
+      host-header: X-Forwarded-Host
+mybatis-plus:
+  #enable aliases
+  type-aliases-package: top.wei.oauth2.model
+  #enable locations
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      update-strategy: not_null
+      id-type: ASSIGN_ID
+logging:
+  #deafult
+  config: classpath:logback-spring.xml
+
+

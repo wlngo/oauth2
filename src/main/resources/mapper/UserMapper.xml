@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wei.oauth2.mapper.UserMapper">
+
+    <resultMap id="userLoginDtoResultMap" type="userLoginDto">
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="password" column="password"/>
+        <result property="accountExpired" column="accountExpired"/>
+        <result property="accountLocked" column="accountLocked"/>
+        <result property="credentialsExpired" column="credentialsExpired"/>
+        <result property="disabled" column="disabled"/>
+
+        <collection property="roleNames" ofType="string">
+            <result column="role_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectUserRoleByUserName" resultType="top.wei.oauth2.model.dto.UserLoginDto"
+            resultMap="userLoginDtoResultMap">
+        select u.user_id, u.username,u.phone_number,
+        u.`password`,u.accountExpired,u.accountLocked,u.credentialsExpired,u.disabled,
+        r.role_name
+        from t_user u
+        LEFT JOIN t_user_role_relation urr on urr.user_id = u.user_id
+        LEFT JOIN t_role r on urr.role_id = r.role_id and r.deleted = 0
+        <where>
+            u.username = #{username}
+            and u.deleted = 0
+        </where>
+    </select>
+    <select id="selectUserRoleByPhoneNumber" resultType="top.wei.oauth2.model.dto.UserLoginDto"
+            resultMap="userLoginDtoResultMap">
+        select u.user_id, u.username,u.phone_number,
+        u.`password`,u.accountExpired,u.accountLocked,u.credentialsExpired,u.disabled,
+        r.role_name
+        from t_user u
+        LEFT JOIN t_user_role_relation urr on urr.user_id = u.user_id
+        LEFT JOIN t_role r on urr.role_id = r.role_id and r.deleted = 0
+        <where>
+            u.phone_number = #{phoneNumber}
+            and u.deleted = 0
+        </where>
+
+    </select>
+</mapper>

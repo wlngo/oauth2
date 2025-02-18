@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wei.oauth2.mapper.Oauth2AuthorizationMapper">
+
+    <select id="findByTokenType" resultType="top.wei.oauth2.model.entity.Oauth2Authorization">
+
+        SELECT * FROM oauth2_authorization WHERE state_index_sha256 =#{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE authorization_code_value_index_sha256 = #{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE access_token_value_index_sha256 = #{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE oidc_id_token_value__index_sha256 = #{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE refresh_token_value_index_sha256 = #{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE user_code_value_index_sha256 = #{tokenIndexSha256}
+        UNION
+        SELECT * FROM oauth2_authorization WHERE device_code_value_index_sha256 = #{tokenIndexSha256}
+    </select>
+</mapper>
