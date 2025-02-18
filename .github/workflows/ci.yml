@@ -32,8 +32,8 @@ jobs:
         image: redis:latest
         ports:
           - 6379:6379  # 映射 Redis 服务的端口
-        options: >-
-          --requirepass "admin"
+        volumes:
+          - ${redis.conf}:/etc/redis/redis.conf
 
     container: maven:3.8.5-openjdk-17
     steps:
