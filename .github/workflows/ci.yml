@@ -17,6 +17,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: build
 
     services:
       mysql:
@@ -28,9 +29,11 @@ jobs:
           MYSQL_DATABASE: oauth2  # 创建一个测试数据库
 
       redis:
-        image: redis:latest
+        image: bitnami/redis:latest
         ports:
           - 6379:6379  # 映射 Redis 服务的端口
+        env:
+          REDIS_PASSWORD: admin
     container: maven:3.9.9-eclipse-temurin-21
     steps:
       - uses: actions/checkout@v4
@@ -43,3 +46,6 @@ jobs:
             maven-
       - name: Build with Maven
         run: mvn -B package
+
+      - name : dev
+        run: ""
