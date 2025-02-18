@@ -80,7 +80,7 @@ public class Oauth2Config {
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
                     .sessionManagement(AbstractHttpConfigurer::disable)
-                    .csrf(AbstractHttpConfigurer::disable)
+                    .csrf(Customizer.withDefaults())
                     .cors(Customizer.withDefaults());
 
             return http.build();
@@ -250,7 +250,7 @@ public class Oauth2Config {
 
 
                     )
-                    .csrf(AbstractHttpConfigurer::disable)
+                    .csrf(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
