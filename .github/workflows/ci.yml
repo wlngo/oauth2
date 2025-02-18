@@ -31,7 +31,7 @@ jobs:
         image: redis:latest
         ports:
           - 6379:6379  # 映射 Redis 服务的端口
-    container: maven:3.8.5-openjdk-21
+    container: maven:3.9.9-eclipse-temurin-21
     steps:
       - uses: actions/checkout@v4
       - name: Cache Maven dependencies
