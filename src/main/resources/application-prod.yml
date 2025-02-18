@@ -1,0 +1,44 @@
+server:
+  port: ${server_port:8050}
+#数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://mysql:3306/oauth2?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    hikari:
+      username: ${database_username:root}
+      password: ${database_password:root}
+  sql:
+    init:
+      schema-locations: classpath:sql/ddl.sql
+      mode: always
+  session:
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+  data:
+    redis:
+      host: ${redis_host:6379}
+      password: ${redis.password:admin}
+      #60s time out
+      timeout: 60000
+      client-type: jedis
+      jedis:
+        pool:
+          # 最大可用连接数（默认为8，负数表示无限）
+          max-active: -1
+          # 最大空闲连接数（默认为8，负数表示无限）
+          max-idle: 8
+          # 最小空闲连接数（默认为0，该值只有为正数才有用）
+          min-idle: 0
+          # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+          max-wait: -1
+
+oauth2:
+  jwkPath: "www.wlngo.top.jks"
+  jwkAlias: "www.wlngo.top"
+  jwkPass: "www.wlngo.top"
+  issuer: "https://wlngo.top:9400"
+  domainName: "https://*.wlngo.top:[*]"
+
