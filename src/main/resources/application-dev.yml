@@ -19,7 +19,6 @@ spring:
   data:
     redis:
       host: redis
-      password: admin
       #60s time out
       timeout: 60000
       client-type: jedis
