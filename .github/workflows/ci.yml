@@ -27,10 +27,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root  # 设置 MySQL 根用户的密码
           MYSQL_DATABASE: oauth2  # 创建一个测试数据库
-        options: >-
-          --health-check-interval 5s
-          --health-check-timeout 3s
-          --health-check-retries 5
 
       redis:
         image: redis:latest
