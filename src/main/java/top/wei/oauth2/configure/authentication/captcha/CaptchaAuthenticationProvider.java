@@ -18,15 +18,16 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 
 /**
- * 验证码认证器
- *
- * @author n1
+ * 验证码认证器.
  */
 public class CaptchaAuthenticationProvider implements AuthenticationProvider, InitializingBean, MessageSourceAware {
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+
     private final CaptchaUserDetailsService captchaUserDetailsService;
+
     private final CaptchaService captchaService;
+
     private MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     public CaptchaAuthenticationProvider(CaptchaUserDetailsService captchaUserDetailsService, CaptchaService captchaService) {

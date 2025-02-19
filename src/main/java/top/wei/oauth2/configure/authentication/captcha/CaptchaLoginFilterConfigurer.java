@@ -10,9 +10,11 @@ import top.wei.oauth2.configure.authentication.AbstractLoginFilterConfigurer;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 
 /**
- * @author 魏亮宁
+ * CaptchaLoginFilterConfigurer.
  */
-public class CaptchaLoginFilterConfigurer<H extends HttpSecurityBuilder<H>> extends AbstractLoginFilterConfigurer<H, CaptchaLoginFilterConfigurer<H>, CaptchaAuthenticationFilter, LoginFilterSecurityConfigurer<H>> {
+
+public class CaptchaLoginFilterConfigurer<H extends HttpSecurityBuilder<H>>
+        extends AbstractLoginFilterConfigurer<H, CaptchaLoginFilterConfigurer<H>, CaptchaAuthenticationFilter, LoginFilterSecurityConfigurer<H>> {
 
     private CaptchaUserDetailsService captchaUserDetailsService;
 
@@ -42,10 +44,11 @@ public class CaptchaLoginFilterConfigurer<H extends HttpSecurityBuilder<H>> exte
     @Override
     protected AuthenticationProvider authenticationProvider(H http) {
         ApplicationContext applicationContext = http.getSharedObject(ApplicationContext.class);
-        CaptchaUserDetailsService captchaUserDetailsService = this.captchaUserDetailsService != null ? this.captchaUserDetailsService : getBeanOrNull(applicationContext, CaptchaUserDetailsService.class);
-        Assert.notNull(captchaUserDetailsService,"captchaUserDetailsService is required");
+        CaptchaUserDetailsService captchaUserDetailsService = this.captchaUserDetailsService != null ? this.captchaUserDetailsService
+                : getBeanOrNull(applicationContext, CaptchaUserDetailsService.class);
+        Assert.notNull(captchaUserDetailsService, "captchaUserDetailsService is required");
         CaptchaService captchaService = this.captchaService != null ? this.captchaService : getBeanOrNull(applicationContext, CaptchaService.class);
-        Assert.notNull(captchaService,"captchaService is required");
+        Assert.notNull(captchaService, "captchaService is required");
         return new CaptchaAuthenticationProvider(captchaUserDetailsService, captchaService);
     }
 

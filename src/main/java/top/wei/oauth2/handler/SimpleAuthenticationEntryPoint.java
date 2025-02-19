@@ -19,11 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * 处理认证失败的逻辑
- *
- * @author n1
- * @see AuthenticationException
- * @since 2021 /3/26 14:43
+ * 处理认证失败的逻辑.
  */
 @Slf4j
 public class SimpleAuthenticationEntryPoint extends ResponseWriter implements AuthenticationEntryPoint {

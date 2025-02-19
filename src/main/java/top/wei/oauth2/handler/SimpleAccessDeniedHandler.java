@@ -15,11 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 访问被拒绝时的处理逻辑
- *
- * @author n1
- * @see AccessDeniedException
- * @since 2021 /3/26 14:39
+ * 访问被拒绝时的处理逻辑.
  */
 public class SimpleAccessDeniedHandler extends ResponseWriter implements AccessDeniedHandler {
     @Override

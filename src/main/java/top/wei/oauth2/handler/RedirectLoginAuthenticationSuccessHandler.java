@@ -1,8 +1,5 @@
 package top.wei.oauth2.handler;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +13,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.Assert;
+import top.wei.oauth2.utils.JackSonUtils;
 import top.wei.oauth2.utils.Rest;
 import top.wei.oauth2.utils.RestBody;
 
@@ -23,14 +21,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
 
-/**
- * @author felord.cn
- * @since 1.0.0
- */
 public class RedirectLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    protected final Log logger = LogFactory.getLog(this.getClass());
-    private final ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+    private final Log logger = LogFactory.getLog(this.getClass());
+
     private RequestCache requestCache;
 
 
@@ -72,7 +65,7 @@ public class RedirectLoginAuthenticationSuccessHandler implements Authentication
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        String resBody = objectMapper.writeValueAsString(body);
+        String resBody = JackSonUtils.getObjectMapper().writeValueAsString(body);
         PrintWriter printWriter = response.getWriter();
         printWriter.print(resBody);
         printWriter.flush();

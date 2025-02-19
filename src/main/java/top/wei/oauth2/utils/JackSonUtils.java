@@ -2,6 +2,7 @@ package top.wei.oauth2.utils;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
@@ -12,15 +13,11 @@ import java.util.List;
 
 
 /**
- * @author 魏亮宁
- * @date 2023年07月05日 17:08:00
- * 单例懒汉模式双检锁
+ * 单例懒汉模式双检锁.
  */
 public class JackSonUtils {
 
-
-    private volatile static ObjectMapper objectMapper;
-
+    private static volatile ObjectMapper objectMapper;
 
     public static ObjectMapper getObjectMapper() {
         // 第一次校验
@@ -37,7 +34,9 @@ public class JackSonUtils {
                     objectMapper.registerModules(securityModules);
                     objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
                     objectMapper.registerModules(new IdServerJackson2Module());
+                    objectMapper.registerModule(new JavaTimeModule());
                     objectMapper.addMixIn(Collections.singletonMap(null, null).getClass(), Collections.singletonMap(null, null).getClass());
+                    objectMapper.deactivateDefaultTyping();
                 }
             }
         }

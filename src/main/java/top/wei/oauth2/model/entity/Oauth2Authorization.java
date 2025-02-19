@@ -11,14 +11,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author 魏亮宁
- * @since 2023-12-28 17:52:42
- */
+
 @Getter
 @Setter
 @Accessors(chain = true)

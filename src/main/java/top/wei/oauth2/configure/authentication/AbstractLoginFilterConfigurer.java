@@ -8,16 +8,31 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
-import org.springframework.security.config.annotation.web.configurers.*;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SecurityContextConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.PortMapper;
-import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.util.matcher.*;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.Assert;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
@@ -27,14 +42,13 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * 认证过滤器{@link AbstractAuthenticationProcessingFilter}s
- *
- * @param <H>
- * @param <C>
- * @param <F>
- * @author 魏亮宁
+ * 认证过滤器.
  */
-public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilder<H>, C extends AbstractLoginFilterConfigurer<H, C, F, A>, F extends AbstractAuthenticationProcessingFilter, A extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, H>>
+public abstract class AbstractLoginFilterConfigurer
+        <H extends HttpSecurityBuilder<H>,
+                C extends AbstractLoginFilterConfigurer<H, C, F, A>,
+                F extends AbstractAuthenticationProcessingFilter,
+                A extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, H>>
         extends AbstractHttpConfigurer<AbstractLoginFilterConfigurer<H, C, F, A>, H> {
     private final A configurerAdapter;
 
@@ -128,7 +142,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Forward Authentication Failure Handler
+     * Forward Authentication Failure Handler.
      *
      * @param forwardUrl the target URL in case of failure
      * @return the {@link FormLoginConfigurer} for additional customization
@@ -224,18 +238,16 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
         Class<SecurityContextConfigurer> securityContextConfigurerClass = SecurityContextConfigurer.class;
         SecurityContextConfigurer securityContextConfigurer = http.getConfigurer(SecurityContextConfigurer.class);
 
-
         Method isRequireExplicitSave = securityContextConfigurerClass.getDeclaredMethod("isRequireExplicitSave");
         isRequireExplicitSave.setAccessible(true);
         boolean requireExplicitSave = (boolean) isRequireExplicitSave.invoke(securityContextConfigurer);
 
         Method getSecurityContextRepository = securityContextConfigurerClass.getDeclaredMethod("getSecurityContextRepository");
         getSecurityContextRepository.setAccessible(true);
-        SecurityContextRepository SecurityContextRepository = (SecurityContextRepository) getSecurityContextRepository.invoke(securityContextConfigurer);
-
+        SecurityContextRepository securityContextRepository = (SecurityContextRepository) getSecurityContextRepository.invoke(securityContextConfigurer);
 
         if (securityContextConfigurer != null && requireExplicitSave) {
-            this.authFilter.setSecurityContextRepository(SecurityContextRepository);
+            this.authFilter.setSecurityContextRepository(securityContextRepository);
         }
         this.authFilter.setSecurityContextHolderStrategy(getSecurityContextHolderStrategy());
 
@@ -253,7 +265,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Gets the Authentication Filter
+     * Gets the Authentication Filter.
      *
      * @return the Authentication Filter
      */
@@ -262,7 +274,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Sets the Authentication Filter
+     * Sets the Authentication Filter.
      *
      * @param authFilter the Authentication Filter
      */
@@ -271,7 +283,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Gets the Authentication Entry Point
+     * Gets the Authentication Entry Point.
      *
      * @return the Authentication Entry Point
      */
@@ -280,7 +292,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Gets the URL to submit an authentication request to (i.e. where username/password
+     * Gets the URL to submit an authentication request to (i.e. where username/password.
      * must be submitted)
      *
      * @return the URL to submit an authentication request to
@@ -290,7 +302,7 @@ public abstract class AbstractLoginFilterConfigurer<H extends HttpSecurityBuilde
     }
 
     /**
-     * Gets the URL to send users to if authentication fails
+     * Gets the URL to send users to if authentication fails.
      *
      * @return the URL to send users if authentication fails (e.g. "/login?error").
      */

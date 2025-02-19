@@ -16,8 +16,7 @@ import top.wei.oauth2.model.entity.PersistentLogins;
 import java.util.Date;
 
 /**
- * @author 魏亮宁
- * @date 2023年12月10日 15:33:00
+ * PersistentTokenRepositoryImpl.
  */
 @Service
 @Slf4j

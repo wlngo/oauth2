@@ -15,9 +15,7 @@ import java.util.List;
 
 
 /**
- * @author 魏亮宁
- * @date 2023年06月25日 08:48:00
- * RegisteredClient的存储库的实现
+ * RegisteredClientRepositoryImpl.
  */
 @Service
 @RequiredArgsConstructor

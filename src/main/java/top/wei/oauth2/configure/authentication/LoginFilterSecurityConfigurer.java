@@ -11,7 +11,6 @@ import top.wei.oauth2.configure.authentication.captcha.CaptchaLoginFilterConfigu
 /**
  * The type Login filter security configurer.
  *
- * @author 魏亮宁
  * @param <H> the type parameter
  */
 public class LoginFilterSecurityConfigurer<H extends HttpSecurityBuilder<H>> extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, H> {

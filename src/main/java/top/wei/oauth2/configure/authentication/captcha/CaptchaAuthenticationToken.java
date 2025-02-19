@@ -10,7 +10,7 @@ import java.io.Serial;
 import java.util.Collection;
 
 /**
- * @author n1
+ * CaptchaAuthenticationToken.
  */
 @JsonSerialize
 public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
@@ -19,6 +19,7 @@ public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     private final Object principal;
+
     private String captcha;
 
     /**
@@ -41,7 +42,7 @@ public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
      * @param captcha     the captcha
      * @param authorities the authorities
      */
-    @ConstructorProperties({"principal","captcha"})
+    @ConstructorProperties({"principal", "captcha"})
     public CaptchaAuthenticationToken(Object principal, String captcha,
                                       Collection<? extends GrantedAuthority> authorities) {
         super(authorities);

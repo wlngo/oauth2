@@ -4,7 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.core.*;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2DeviceCode;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
+import org.springframework.security.oauth2.core.OAuth2UserCode;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
@@ -24,123 +29,155 @@ import top.wei.oauth2.model.entity.Oauth2RegisteredClient;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * @author 魏亮宁
- * @date 2023年06月25日 14:49:00
- */
+
 public class ConvertUtils {
 
-
-    @SuppressWarnings("unchecked")
-    public static OAuth2Authorization oAuth2AuthorizationToSpringOauth2Authorization(Oauth2Authorization oauth2Authorization, RegisteredClient registeredClient) {
+    public static OAuth2Authorization oAuth2AuthorizationToSpringOauth2Authorization(
+            Oauth2Authorization oauth2Authorization, RegisteredClient registeredClient) {
         Assert.notNull(registeredClient, "registeredClient cannot be empty");
         OAuth2Authorization.Builder builder = OAuth2Authorization.withRegisteredClient(registeredClient);
 
-        String id = oauth2Authorization.getId();
-        String principalName = oauth2Authorization.getPrincipalName();
-        String authorizationGrantType = oauth2Authorization.getAuthorizationGrantType();
-        Set<String> authorizedScopes = Collections.emptySet();
+        builder.id(oauth2Authorization.getId())
+                .principalName(oauth2Authorization.getPrincipalName())
+                .authorizationGrantType(new AuthorizationGrantType(oauth2Authorization.getAuthorizationGrantType()))
+                .authorizedScopes(getAuthorizedScopes(oauth2Authorization))
+                .attributes(attr -> attr.putAll(getAttributes(oauth2Authorization)));
+
+        handleState(oauth2Authorization, builder);
+        handleAuthorizationCode(oauth2Authorization, builder);
+        handleAccessToken(oauth2Authorization, builder);
+        handleOidcIdToken(oauth2Authorization, builder);
+        handleRefreshToken(oauth2Authorization, builder);
+        handleUserCode(oauth2Authorization, builder);
+        handleDeviceCode(oauth2Authorization, builder);
+
+        return builder.build();
+    }
+
+    private static Set<String> getAuthorizedScopes(Oauth2Authorization oauth2Authorization) {
         if (oauth2Authorization.getAuthorizedScopes() != null) {
-            authorizedScopes = StringUtils.commaDelimitedListToSet(oauth2Authorization.getAuthorizedScopes());
+            return StringUtils.commaDelimitedListToSet(oauth2Authorization.getAuthorizedScopes());
         }
+        return Collections.emptySet();
+    }
 
-        Map<String, Object> attributes = readMap(byteToString(oauth2Authorization.getAttributes()));
-        builder.id(id)
-                .principalName(principalName)
-                .authorizationGrantType(new AuthorizationGrantType(authorizationGrantType))
-                .authorizedScopes(authorizedScopes)
-                .attributes((attrs) -> attrs.putAll(attributes));
+    private static Map<String, Object> getAttributes(Oauth2Authorization oauth2Authorization) {
+        return readMap(byteToString(oauth2Authorization.getAttributes()));
+    }
 
+    private static void handleState(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String state = oauth2Authorization.getState();
         if (StringUtils.hasText(state)) {
             builder.attribute(OAuth2ParameterNames.STATE, state);
         }
-        String authorizationCodeValue = byteToString(oauth2Authorization.getAuthorizationCodeValue());
+    }
 
-        Instant tokenIssuedAt;
-        Instant tokenExpiresAt;
+    private static void handleAuthorizationCode(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
+        String authorizationCodeValue = byteToString(oauth2Authorization.getAuthorizationCodeValue());
         if (StringUtils.hasText(authorizationCodeValue)) {
-            tokenIssuedAt = oauth2Authorization.getAuthorizationCodeIssuedAt().toInstant();
-            tokenExpiresAt = oauth2Authorization.getAuthorizationCodeExpiresAt().toInstant();
+            Instant tokenIssuedAt = oauth2Authorization.getAuthorizationCodeIssuedAt().toInstant();
+            Instant tokenExpiresAt = oauth2Authorization.getAuthorizationCodeExpiresAt().toInstant();
             Map<String, Object> authorizationCodeMetadata = readMap(byteToString(oauth2Authorization.getAuthorizationCodeMetadata()));
 
             OAuth2AuthorizationCode authorizationCode = new OAuth2AuthorizationCode(
                     authorizationCodeValue, tokenIssuedAt, tokenExpiresAt);
-            builder.token(authorizationCode, (metadata) -> metadata.putAll(authorizationCodeMetadata));
+            builder.token(authorizationCode, metadata -> metadata.putAll(authorizationCodeMetadata));
         }
+    }
 
+    private static void handleAccessToken(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String accessTokenValue = byteToString(oauth2Authorization.getAccessTokenValue());
         if (StringUtils.hasText(accessTokenValue)) {
-            tokenIssuedAt = oauth2Authorization.getAccessTokenIssuedAt().toInstant();
-            tokenExpiresAt = oauth2Authorization.getAccessTokenExpiresAt().toInstant();
-            Map<String, Object> accessTokenMetadata = readMap(byteToString(oauth2Authorization.getAccessTokenMetadata()));
-            OAuth2AccessToken.TokenType tokenType = null;
-            if (OAuth2AccessToken.TokenType.BEARER.getValue().equalsIgnoreCase(oauth2Authorization.getAccessTokenType())) {
-                tokenType = OAuth2AccessToken.TokenType.BEARER;
-            }
+            Instant tokenIssuedAt = oauth2Authorization.getAccessTokenIssuedAt().toInstant();
+            Instant tokenExpiresAt = oauth2Authorization.getAccessTokenExpiresAt().toInstant();
 
-            Set<String> scopes = Collections.emptySet();
-            String accessTokenScopes = oauth2Authorization.getAccessTokenScopes();
-            if (accessTokenScopes != null) {
-                scopes = StringUtils.commaDelimitedListToSet(accessTokenScopes);
-            }
+            OAuth2AccessToken.TokenType tokenType = getTokenType(oauth2Authorization);
             Assert.notNull(tokenType, "tokenType cannot be null");
-            OAuth2AccessToken accessToken = new OAuth2AccessToken(tokenType, accessTokenValue, tokenIssuedAt, tokenExpiresAt, scopes);
-            builder.token(accessToken, (metadata) -> metadata.putAll(accessTokenMetadata));
-        }
 
+            Set<String> scopes = getAccessTokenScopes(oauth2Authorization);
+            OAuth2AccessToken accessToken = new OAuth2AccessToken(tokenType, accessTokenValue, tokenIssuedAt, tokenExpiresAt, scopes);
+            Map<String, Object> accessTokenMetadata = readMap(byteToString(oauth2Authorization.getAccessTokenMetadata()));
+            builder.token(accessToken, metadata -> metadata.putAll(accessTokenMetadata));
+        }
+    }
+
+    private static OAuth2AccessToken.TokenType getTokenType(Oauth2Authorization oauth2Authorization) {
+        String accessTokenType = oauth2Authorization.getAccessTokenType();
+        return OAuth2AccessToken.TokenType.BEARER.getValue().equalsIgnoreCase(accessTokenType)
+                ? OAuth2AccessToken.TokenType.BEARER : null;
+    }
+
+    private static Set<String> getAccessTokenScopes(Oauth2Authorization oauth2Authorization) {
+        String accessTokenScopes = oauth2Authorization.getAccessTokenScopes();
+        if (accessTokenScopes != null) {
+            return StringUtils.commaDelimitedListToSet(accessTokenScopes);
+        }
+        return Collections.emptySet();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void handleOidcIdToken(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String oidcIdTokenValue = byteToString(oauth2Authorization.getOidcIdTokenValue());
         if (StringUtils.hasText(oidcIdTokenValue)) {
-            tokenIssuedAt = oauth2Authorization.getOidcIdTokenIssuedAt().toInstant();
-            tokenExpiresAt = oauth2Authorization.getOidcIdTokenExpiresAt().toInstant();
+            Instant tokenIssuedAt = oauth2Authorization.getOidcIdTokenIssuedAt().toInstant();
+            Instant tokenExpiresAt = oauth2Authorization.getOidcIdTokenExpiresAt().toInstant();
             Map<String, Object> oidcTokenMetadata = readMap(byteToString(oauth2Authorization.getOidcIdTokenMetadata()));
 
             OidcIdToken oidcToken = new OidcIdToken(
                     oidcIdTokenValue, tokenIssuedAt, tokenExpiresAt, (Map<String, Object>) oidcTokenMetadata.get(OAuth2Authorization.Token.CLAIMS_METADATA_NAME));
-            builder.token(oidcToken, (metadata) -> metadata.putAll(oidcTokenMetadata));
+            builder.token(oidcToken, metadata -> metadata.putAll(oidcTokenMetadata));
         }
+    }
 
+    private static void handleRefreshToken(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String refreshTokenValue = byteToString(oauth2Authorization.getRefreshTokenValue());
         if (StringUtils.hasText(refreshTokenValue)) {
-            tokenIssuedAt = oauth2Authorization.getRefreshTokenIssuedAt().toInstant();
-            tokenExpiresAt = null;
+            Instant tokenIssuedAt = oauth2Authorization.getRefreshTokenIssuedAt().toInstant();
+            Instant tokenExpiresAt = getRefreshTokenExpiresAt(oauth2Authorization);
 
-            Date refreshTokenExpiresAt = oauth2Authorization.getRefreshTokenExpiresAt();
-            if (refreshTokenExpiresAt != null) {
-                tokenExpiresAt = refreshTokenExpiresAt.toInstant();
-            }
             Map<String, Object> refreshTokenMetadata = readMap(byteToString(oauth2Authorization.getRefreshTokenMetadata()));
-
-            OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(
-                    refreshTokenValue, tokenIssuedAt, tokenExpiresAt);
-            builder.token(refreshToken, (metadata) -> metadata.putAll(refreshTokenMetadata));
+            OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenValue, tokenIssuedAt, tokenExpiresAt);
+            builder.token(refreshToken, metadata -> metadata.putAll(refreshTokenMetadata));
         }
+    }
 
+    private static Instant getRefreshTokenExpiresAt(Oauth2Authorization oauth2Authorization) {
+        Date refreshTokenExpiresAt = oauth2Authorization.getRefreshTokenExpiresAt();
+        return refreshTokenExpiresAt != null ? refreshTokenExpiresAt.toInstant() : null;
+    }
+
+    private static void handleUserCode(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String userCodeValue = byteToString(oauth2Authorization.getUserCodeValue());
         if (StringUtils.hasText(userCodeValue)) {
-            tokenIssuedAt = oauth2Authorization.getUserCodeIssuedAt().toInstant();
-            tokenExpiresAt = oauth2Authorization.getUserCodeExpiresAt().toInstant();
+            Instant tokenIssuedAt = oauth2Authorization.getUserCodeIssuedAt().toInstant();
+            Instant tokenExpiresAt = oauth2Authorization.getUserCodeExpiresAt().toInstant();
             Map<String, Object> userCodeMetadata = readMap(byteToString(oauth2Authorization.getUserCodeMetadata()));
 
             OAuth2UserCode userCode = new OAuth2UserCode(userCodeValue, tokenIssuedAt, tokenExpiresAt);
-            builder.token(userCode, (metadata) -> metadata.putAll(userCodeMetadata));
+            builder.token(userCode, metadata -> metadata.putAll(userCodeMetadata));
         }
+    }
 
+    private static void handleDeviceCode(Oauth2Authorization oauth2Authorization, OAuth2Authorization.Builder builder) {
         String deviceCodeValue = byteToString(oauth2Authorization.getDeviceCodeValue());
         if (StringUtils.hasText(deviceCodeValue)) {
-            tokenIssuedAt = oauth2Authorization.getDeviceCodeIssuedAt().toInstant();
-            tokenExpiresAt = oauth2Authorization.getDeviceCodeExpiresAt().toInstant();
+            Instant tokenIssuedAt = oauth2Authorization.getDeviceCodeIssuedAt().toInstant();
+            Instant tokenExpiresAt = oauth2Authorization.getDeviceCodeExpiresAt().toInstant();
             Map<String, Object> deviceCodeMetadata = readMap(byteToString(oauth2Authorization.getDeviceCodeMetadata()));
 
             OAuth2DeviceCode deviceCode = new OAuth2DeviceCode(deviceCodeValue, tokenIssuedAt, tokenExpiresAt);
-            builder.token(deviceCode, (metadata) -> metadata.putAll(deviceCodeMetadata));
+            builder.token(deviceCode, metadata -> metadata.putAll(deviceCodeMetadata));
         }
-
-        return builder.build();
-
     }
+
 
 
     public static Oauth2Authorization springOauth2AuthorizationToOauth2Authorization(OAuth2Authorization authorization) {
@@ -168,7 +205,6 @@ public class ConvertUtils {
         oauth2Authorization.setState(state);
         oauth2Authorization.setStateIndexSha256(state != null ? DigestUtils.sha256Hex(state) : null);
 
-
         setAuthorizationCode(oauth2Authorization, authorization);
 
         setAccessToken(oauth2Authorization, authorization);
@@ -183,12 +219,11 @@ public class ConvertUtils {
 
         return oauth2Authorization;
 
-
     }
 
 
     /**
-     * 设备代码 OAuth2DeviceCode  OAuth 2.0 设备授权授予的一部分
+     * 设备代码 OAuth2DeviceCode  OAuth 2.0 设备授权授予的一部分.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -207,7 +242,7 @@ public class ConvertUtils {
 
 
     /**
-     * 用户代码 OAuth2UserCode  OAuth 2.0 设备授权授予的一部分
+     * 用户代码 OAuth2UserCode  OAuth 2.0 设备授权授予的一部分.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -225,7 +260,7 @@ public class ConvertUtils {
     }
 
     /**
-     * 刷新令牌 OAuth2RefreshToke
+     * 刷新令牌 OAuth2RefreshToke.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -243,7 +278,7 @@ public class ConvertUtils {
     }
 
     /**
-     * OpenID Connect Core 1.0 ID 令牌 OidcIdToken
+     * OpenID Connect Core 1.0 ID 令牌 OidcIdToken.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -261,7 +296,7 @@ public class ConvertUtils {
     }
 
     /**
-     * 访问令牌 OAuth2AccessToken
+     * 访问令牌 OAuth2AccessToken.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -292,7 +327,7 @@ public class ConvertUtils {
 
 
     /**
-     * 授权码 AuthorizationCode
+     * 授权码 AuthorizationCode.
      *
      * @param oauth2Authorization 数据库实体
      * @param authorization       authorization
@@ -311,7 +346,7 @@ public class ConvertUtils {
     }
 
     /**
-     * token 实体化
+     * token 实体化.
      *
      * @param token OAuth2Authorization.Token
      * @return TokenDto
@@ -350,15 +385,13 @@ public class ConvertUtils {
         registeredClient.getAuthorizationGrantTypes().forEach(authorizationGrantType ->
                 authorizationGrantTypes.add(authorizationGrantType.getValue()));
 
-
         Oauth2RegisteredClient oauth2RegisteredClient = new Oauth2RegisteredClient();
 
         oauth2RegisteredClient.setClientId(registeredClient.getId())
                 .setClientId(registeredClient.getClientId())
                 .setClientIdIssuedAt(registeredClient.getClientIdIssuedAt() != null
                         ? registeredClient.getClientIdIssuedAt() : Instant.now())
-                .setClientSecretExpiresAt(registeredClient.getClientSecretExpiresAt() != null ?
-                        registeredClient.getClientSecretExpiresAt() : null)
+                .setClientSecretExpiresAt(registeredClient.getClientSecretExpiresAt() != null ? registeredClient.getClientSecretExpiresAt() : null)
                 .setClientSecret(registeredClient.getClientSecret())
                 .setClientName(registeredClient.getClientName())
                 .setClientAuthenticationMethods(StringUtils.collectionToCommaDelimitedString(clientAuthenticationMethods))
@@ -399,7 +432,6 @@ public class ConvertUtils {
                 .clientSettings(read(oauth2RegisteredClient.getClientSettings(), ClientSettingsDto.class).builderClientSettings())
                 .tokenSettings(read(oauth2RegisteredClient.getTokenSettings(), TokenSettingsDto.class).builderTokenSettings())
                 .build();
-
 
     }
 
@@ -462,7 +494,7 @@ public class ConvertUtils {
 
 
     /**
-     * 字符串转Byte
+     * 字符串转Byte.
      *
      * @param str 字符串
      * @return string非hasText返回null 其他返回byte[]

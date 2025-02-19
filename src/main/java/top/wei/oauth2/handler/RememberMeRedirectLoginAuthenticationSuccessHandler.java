@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 
 public class RememberMeRedirectLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    protected final Log logger = LogFactory.getLog(this.getClass());
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     private RequestCache requestCache;
 
@@ -52,14 +52,14 @@ public class RememberMeRedirectLoginAuthenticationSuccessHandler implements Auth
         }
     }
 
-    private void redirectLogin(String redirectUrl,HttpServletResponse response) throws IOException {
+    private void redirectLogin(String redirectUrl, HttpServletResponse response) throws IOException {
         if (response.isCommitted()) {
             logger.debug("Response has already been committed");
             return;
         }
-        if (StringUtils.isNotBlank(redirectUrl)){
+        if (StringUtils.isNotBlank(redirectUrl)) {
             response.sendRedirect(redirectUrl);
-        }else {
+        } else {
             response.sendRedirect("/");
         }
     }
