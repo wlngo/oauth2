@@ -5,10 +5,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaAuthenticationToken;
 
-/**
- * @author felord.cn
- * @since 1.0.0
- */
 public class IdServerJackson2Module extends SimpleModule {
 
     public IdServerJackson2Module() {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 /**
  * The type OAuth2LoginController.
  *
- * @author felord.cn
  * @since 1.0.0
  */
 @Controller
@@ -24,6 +23,7 @@ public class OAuth2LoginController {
      * Oauth 2 login page string.
      *
      * @param model              the model
+     * @param request            request
      * @param authentication     the authentication
      * @param enableCaptchaLogin the enable captcha login
      * @param csrfToken          the csrf token
@@ -32,18 +32,18 @@ public class OAuth2LoginController {
     @GetMapping("/login")
     public String oauth2LoginPage(Model model,
                                   HttpServletRequest request,
-                              @CurrentSecurityContext(expression = "authentication") Authentication authentication,
-                              @Value("${spring.security.oauth2.server.login.captcha.enabled:true}") boolean enableCaptchaLogin,
-                              @RequestAttribute(name = "org.springframework.security.web.csrf.CsrfToken", required = false) CsrfToken csrfToken) {
+                                  @CurrentSecurityContext(expression = "authentication") Authentication authentication,
+                                  @Value("${spring.security.oauth2.server.login.captcha.enabled:true}") boolean enableCaptchaLogin,
+                                  @RequestAttribute(name = "org.springframework.security.web.csrf.CsrfToken", required = false) CsrfToken csrfToken) {
 
-        if (!(authentication instanceof AnonymousAuthenticationToken)){
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
         }
         if (csrfToken != null) {
             model.addAttribute("_csrfToken", csrfToken);
         }
-        model.addAttribute("enableCaptchaLogin",enableCaptchaLogin);
-        model.addAttribute("defaultUrl",request.getContextPath());
+        model.addAttribute("enableCaptchaLogin", enableCaptchaLogin);
+        model.addAttribute("defaultUrl", request.getContextPath());
         return "oauth2_login";
     }
 
@@ -64,7 +64,7 @@ public class OAuth2LoginController {
         if (csrfToken != null) {
             model.addAttribute("_csrfToken", csrfToken);
         }
-        model.addAttribute("principal",authentication.getName());
+        model.addAttribute("principal", authentication.getName());
         return "oauth2_index";
     }
 

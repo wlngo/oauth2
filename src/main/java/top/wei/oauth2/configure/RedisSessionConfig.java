@@ -8,16 +8,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-/**
- * @author 魏亮宁
- * @date 2023年07月12日 16:25:00
- */
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24)
 public class RedisSessionConfig {
 
     @Bean
-    @ConditionalOnProperty(prefix = "oauth2",name = "domainName")
+    @ConditionalOnProperty(prefix = "oauth2", name = "domainName")
     public CorsFilter corsFilter(Oauth2Properties oauth2Properties) {
         CorsConfiguration config = new CorsConfiguration();
         //允许白名单域名进行跨域调用

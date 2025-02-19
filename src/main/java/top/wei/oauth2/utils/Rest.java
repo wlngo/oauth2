@@ -2,10 +2,6 @@ package top.wei.oauth2.utils;
 
 /**
  * The interface Rest.
- *
- * @param <T> the type parameter
- * @author n1
- * @since 1.0.0
  */
 public interface Rest<T> {
     /**

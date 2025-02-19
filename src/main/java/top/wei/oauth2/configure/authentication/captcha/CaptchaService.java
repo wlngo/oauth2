@@ -1,12 +1,12 @@
 package top.wei.oauth2.configure.authentication.captcha;
 
 /**
- * @author n1
+ * CaptchaService.
  */
 public interface CaptchaService {
 
     /**
-     * verify captcha
+     * verify captcha.
      *
      * @param phone   phone
      * @param rawCode rawCode
@@ -16,7 +16,7 @@ public interface CaptchaService {
 
 
     /**
-     * sendSms
+     * sendSms.
      *
      * @param phone phone
      */

@@ -15,8 +15,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
- * @author 魏亮宁
- * @date 2023年07月07日 16:27:00
+ * OidcUserInfoServiceImpl.
  */
 @Service
 @Slf4j
@@ -54,32 +53,24 @@ public class OidcUserInfoServiceImpl implements OidcUserInfoService {
                 .zoneinfo(TimeZone.getDefault().getID())
                 .locale(Locale.getDefault().getLanguage());
 
-
         if (user.getGender() != null) {
             if (user.getGender().equals(0)) {
                 builder.gender("女");
             }
-            if (user.getGender().equals(0)) {
-                builder.gender("女");
+            if (user.getGender().equals(1)) {
+                builder.gender("男");
             }
-        } else {
-            builder.gender(null);
         }
-
         if (user.getBirthdate() != null) {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String birthDate = ft.format(user.getBirthdate());
             builder.birthdate(birthDate);
-        } else {
-            builder.birthdate(null);
         }
 
         if (user.getUpdateTime() != null) {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String updateTime = ft.format(user.getUpdateTime());
             builder.updatedAt(updateTime);
-        } else {
-            builder.updatedAt(null);
         }
         return builder.build().getClaims();
     }

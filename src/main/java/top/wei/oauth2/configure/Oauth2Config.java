@@ -14,7 +14,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,20 +21,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.util.matcher.*;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaUserDetailsService;
@@ -43,28 +44,23 @@ import top.wei.oauth2.configure.authentication.impl.CustomOidcUserInfoMapperImpl
 import top.wei.oauth2.handler.RedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
-import top.wei.oauth2.utils.OAuth2ConfigurerUtils;
 
 import java.security.KeyStore;
-import java.util.List;
-import java.util.function.Consumer;
 
-/**
- * @author 魏亮宁
- * @date 2023年06月13日 16:23:00
- */
+
 
 @EnableMethodSecurity
-@EnableWebSecurity()
+@EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 public class Oauth2Config {
 
     private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
+
     private static final String SYSTEM_ANT_PATH = "/system/**";
 
 
     /**
-     * 白名单不拦截的接口或静态资源
+     * 白名单不拦截的接口或静态资源.
      * 优先级最高
      */
     @Configuration(proxyBeanMethods = false)
@@ -88,7 +84,7 @@ public class Oauth2Config {
     }
 
     /**
-     * OAuth2.0授权服务器配置 仅次于白名单
+     * OAuth2.0授权服务器配置 仅次于白名单.
      */
     @Configuration(proxyBeanMethods = false)
     @RequiredArgsConstructor
@@ -106,7 +102,7 @@ public class Oauth2Config {
         private final CustomOidcUserInfoMapperImpl customOidcUserInfoMapper;
 
         /**
-         * Authorization server  优先级 Ordered.HIGHEST_PRECEDENCE + 1
+         * Authorization server  优先级 Ordered.HIGHEST_PRECEDENCE + 1.
          *
          * @param http http
          * @return SecurityFilterChain
@@ -149,14 +145,14 @@ public class Oauth2Config {
 
             http
                     //Redirect to the login page when exceptions
-                    .exceptionHandling((exceptions) -> exceptions
+                    .exceptionHandling(exceptions -> exceptions
                             .defaultAuthenticationEntryPointFor(
                                     new LoginUrlAuthenticationEntryPoint("/login"),
                                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                             )
                     )
                     // Accept access tokens for User Info and/or Client Registration
-                    .oauth2ResourceServer((resourceServer) -> resourceServer
+                    .oauth2ResourceServer(resourceServer -> resourceServer
                             .jwt(Customizer.withDefaults()));
             return http.build();
         }
@@ -172,7 +168,7 @@ public class Oauth2Config {
          * -validity 过期时间，单位：天
          * -keystore 指定存储密钥的 密钥库的生成路径、名称。
          * -storepass 指定访问密钥库的密码。
-         * -storetype 密钥储存格式 example pkcs12
+         * -storetype 密钥储存格式 example pkcs12.
          *
          * @return JWKSource
          */
@@ -195,7 +191,7 @@ public class Oauth2Config {
 
 
         /**
-         * jwk 解密配置
+         * jwk 解密配置.
          *
          * @param jwkSource jwkSource
          * @return JwtDecoder
@@ -209,21 +205,25 @@ public class Oauth2Config {
 
 
     /**
-     * 普通用户访问安全配置.(默认兜底配置)
+     * 普通用户访问安全配置.(默认兜底配置).
      */
     @Configuration(proxyBeanMethods = false)
     @RequiredArgsConstructor
     public static class DefaultUserSecurityConfiguration {
 
         private final UserDetailsService userDetailsService;
+
         private final PersistentTokenRepository persistentTokenRepository;
+
         private final CaptchaService captchaService;
+
         private final CaptchaUserDetailsService captchaUserDetailsService;
 
         /**
-         * 最低优先级
+         * 最低优先级.
          *
-         * @param http http
+         * @param http                http
+         * @param securityFilterChain securityFilterChain
          * @return SecurityFilterChain
          * @throws Exception Exception
          */
@@ -239,17 +239,14 @@ public class Oauth2Config {
             RedirectLoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler = new RedirectLoginAuthenticationSuccessHandler();
             RememberMeRedirectLoginAuthenticationSuccessHandler rememberMeRedirectLoginAuthenticationSuccessHandler = new RememberMeRedirectLoginAuthenticationSuccessHandler();
             http
+                    .authorizeHttpRequests(authorize -> {
+                        authorize.requestMatchers(new AndRequestMatcher(
+                                new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
+                                new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
+                        ));
+                        authorize.anyRequest().authenticated();
+                    })
 
-                    .authorizeHttpRequests((authorize) -> {
-                                authorize.requestMatchers(new AndRequestMatcher(
-                                        new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
-                                        new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
-                                ));
-                                authorize.anyRequest().authenticated();
-                            }
-
-
-                    )
                     .csrf(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
@@ -261,9 +258,9 @@ public class Oauth2Config {
                                     .failureHandler(authenticationFailureHandler).permitAll())
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
-                    .exceptionHandling((exceptions) -> exceptions
+                    .exceptionHandling(exceptions -> exceptions
                             .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/"),
+                                    new LoginUrlAuthenticationEntryPoint("/login"),
                                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                             )
                     )
@@ -273,18 +270,18 @@ public class Oauth2Config {
                             .authenticationSuccessHandler(rememberMeRedirectLoginAuthenticationSuccessHandler)
                     )
                     // 手机号验证码登录模拟
-                    .with(new LoginFilterSecurityConfigurer<>(), httpSecurityLoginFilterSecurityConfigurer -> httpSecurityLoginFilterSecurityConfigurer.captchaLogin(captchaLoginConfigurer ->
-                            // 验证码校验 1 在此处配置 优先级最高 2 注册为Spring Bean 可以免配置
-                            captchaLoginConfigurer.captchaService(captchaService)
-                                    // 根据手机号查询用户UserDetials  1 在此处配置 优先级最高 2 注册为Spring Bean 可以免配置
-                                    .captchaUserDetailsService(captchaUserDetailsService)
-                                    // 两个登录保持一致
-                                    .successHandler(loginAuthenticationSuccessHandler)
-                                    // 两个登录保持一致
-                                    .failureHandler(authenticationFailureHandler)
-                    ));
-
-
+                    .with(new LoginFilterSecurityConfigurer<>(),
+                            httpSecurityLoginFilterSecurityConfigurer ->
+                                    httpSecurityLoginFilterSecurityConfigurer.captchaLogin(captchaLoginConfigurer ->
+                                            // 验证码校验 1 在此处配置 优先级最高 2 注册为Spring Bean 可以免配置
+                                            captchaLoginConfigurer.captchaService(captchaService)
+                                                    // 根据手机号查询用户UserDetials  1 在此处配置 优先级最高 2 注册为Spring Bean 可以免配置
+                                                    .captchaUserDetailsService(captchaUserDetailsService)
+                                                    // 两个登录保持一致
+                                                    .successHandler(loginAuthenticationSuccessHandler)
+                                                    // 两个登录保持一致
+                                                    .failureHandler(authenticationFailureHandler)
+                                    ));
             return http.build();
         }
 

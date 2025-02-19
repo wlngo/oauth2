@@ -10,14 +10,7 @@ import lombok.experimental.Accessors;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author 魏亮宁
- * @since 2023-06-13 15:37:10
- */
+
 @Getter
 @Setter
 @Accessors(chain = true)

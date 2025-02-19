@@ -5,17 +5,17 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
-/**
- * @author n1
- * @since 1.0.0
- */
 @Data
 public class RestBody<T> implements Rest<T>, Serializable {
 
     private static final long serialVersionUID = -7616216747521482608L;
+
     private int code = 200;
+
     private T data;
+
     private String msg = "";
+
     private boolean identifier = true;
 
 
@@ -85,11 +85,12 @@ public class RestBody<T> implements Rest<T>, Serializable {
 
     @Override
     public String toString() {
-        return "{" +
-                "code:" + code +
-                ", data:" + data +
-                ", msg:" + msg +
-                ", identifier:" + identifier +
-                '}';
+        return "{"
+                + "code:" + code
+                + ", data:" + data
+                + ", msg:" + msg
+                + ", identifier:"
+                + identifier
+                + '}';
     }
 }

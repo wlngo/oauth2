@@ -15,9 +15,7 @@ import top.wei.oauth2.model.dto.UserLoginDto;
 import java.util.List;
 
 /**
- * @author 魏亮宁
- * @date 2023年06月20日 10:32:00
- * 加载用户特定数据的核心界面
+ * 载用户特定数据的核心界面.
  */
 @Service
 @Slf4j
@@ -41,7 +39,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         List<PermissionDto> permissionDtoS = roleMapper.selectPermissionByRoleNames(roleNames);
         String[] authorities = permissionDtoS.stream().map(PermissionDto::getPermissionCode).toArray(String[]::new);
-
 
         return User.withUsername(userLoginDto.getUsername())
                 .password(userLoginDto.getPassword())

@@ -12,10 +12,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.Optional;
 
-/**
- * @author 魏亮宁
- * @date 2023年07月05日 15:17:00
- */
+
 @Data
 @Accessors(chain = true)
 @JsonSerialize
@@ -29,7 +26,7 @@ public class TokenSettingsDto implements Serializable {
     private Duration accessTokenTimeToLive;
 
     /**
-     * 只有两种 reference self-contained
+     * 只有两种 reference self-contained.
      */
     private String accessTokenFormat;
 
@@ -70,7 +67,6 @@ public class TokenSettingsDto implements Serializable {
                 .setRefreshTokenTimeToLive(tokenSettings.getRefreshTokenTimeToLive())
                 .setIdTokenSignatureAlgorithm(tokenSettings.getIdTokenSignatureAlgorithm());
         return tokenSettingsDto;
-
 
     }
 

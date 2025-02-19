@@ -10,11 +10,6 @@ import top.wei.oauth2.utils.Rest;
 import top.wei.oauth2.utils.RestBody;
 
 
-/**
- * 测试OAuth2的控制器
- *
- * @author felord.cn
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +21,7 @@ public class CaptchaController {
     public Rest<?> bar(String phoneNumber, HttpServletRequest httpServletRequest) {
         log.info("{} httpServerRequest {} sendSms ", httpServletRequest.getRemoteAddr(), phoneNumber);
         try {
-           captchaService.sendSms(phoneNumber);
+            captchaService.sendSms(phoneNumber);
         } catch (Exception e) {
             log.info("{} httpServerRequest {} sendSms fail {}", httpServletRequest.getRemoteAddr(), phoneNumber, e.getMessage());
             return RestBody.failure(401, e.getMessage());

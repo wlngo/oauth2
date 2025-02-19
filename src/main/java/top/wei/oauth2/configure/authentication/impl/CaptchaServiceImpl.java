@@ -15,20 +15,19 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * @author 魏亮宁
- * @date 2023年12月10日 16:53:00
+ * CaptchaServiceImpl.
  */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CaptchaServiceImpl implements CaptchaService {
+    private static final String REDIS_PREFIX = "SMS-CODE%s";
+
+    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     private final UserMapper userMapper;
 
     private final RedisTemplate<String, String> redisTemplate;
-
-    private final static String REDIS_PREFIX = "SMS-CODE%s";
-    private final static ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     @Override
     public boolean verifyCaptcha(String phone, String rawCode) {

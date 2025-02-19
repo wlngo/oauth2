@@ -22,9 +22,7 @@ import java.util.List;
 
 
 /**
- * @author 魏亮宁
- * @date 2023年07月03日 08:38:00
- * 实现负责管理 OAuth 2.0 Authorization(s)
+ * impl 负责管理 OAuth 2.0 Authorization(s).
  */
 
 @Service

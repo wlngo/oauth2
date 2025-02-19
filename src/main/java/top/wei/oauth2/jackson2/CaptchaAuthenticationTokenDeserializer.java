@@ -13,10 +13,6 @@ import top.wei.oauth2.configure.authentication.captcha.CaptchaAuthenticationToke
 import java.io.IOException;
 import java.util.List;
 
-/**
- * @author felord.cn
- * @since 1.0.0
- */
 class CaptchaAuthenticationTokenDeserializer extends JsonDeserializer<CaptchaAuthenticationToken> {
 
     private static final TypeReference<List<GrantedAuthority>> GRANTED_AUTHORITY_LIST = new TypeReference<List<GrantedAuthority>>() {
@@ -42,8 +38,7 @@ class CaptchaAuthenticationTokenDeserializer extends JsonDeserializer<CaptchaAut
         JsonNode detailsNode = readJsonNode(jsonNode, "details");
         if (detailsNode.isNull() || detailsNode.isMissingNode()) {
             token.setDetails(null);
-        }
-        else {
+        } else {
             Object details = mapper.readValue(detailsNode.toString(), OBJECT);
             token.setDetails(details);
         }

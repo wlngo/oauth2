@@ -19,10 +19,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * @author 魏亮宁
- * @date 2023年07月07日 16:27:00
- */
 @Configuration
 public class IdTokenCustomizerConfig {
 
@@ -31,7 +27,7 @@ public class IdTokenCustomizerConfig {
     @Bean
     @SuppressWarnings("unchecked")
     public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-        return (context) -> {
+        return context -> {
             if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
                 JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder();
                 String issuer;
@@ -56,7 +52,7 @@ public class IdTokenCustomizerConfig {
                         claims.putAll(build.getClaims()));
             }
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
-                context.getClaims().claims((claims) -> {
+                context.getClaims().claims(claims -> {
                     Set<String> rolesScope = (Set<String>) claims.get("scope");
                     HashSet<String> rolesScopePrefix = new HashSet<>(rolesScope.size());
                     rolesScope.forEach(
@@ -66,7 +62,6 @@ public class IdTokenCustomizerConfig {
                     roles.addAll(rolesScopePrefix);
                     Set<String> collect = roles.stream()
                             .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
-
 
                     claims.put("roles", collect);
                 });

@@ -15,11 +15,9 @@ import top.wei.oauth2.utils.ConvertUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * @author 魏亮宁
- * @date 2023年12月04日 15:58:00
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +30,7 @@ public class Oauth2AuthorizationConsentServiceImpl implements OAuth2Authorizatio
         Assert.notNull(authorizationConsent, "authorizationConsent cannot be null");
         OAuth2AuthorizationConsent existingAuthorizationConsent = findById(
                 authorizationConsent.getRegisteredClientId(), authorizationConsent.getPrincipalName());
-        if (existingAuthorizationConsent == null) {
+        if (Objects.isNull(existingAuthorizationConsent)) {
             Oauth2AuthorizationConsent oauth2AuthorizationConsent = ConvertUtils.springOauth2AuthorizationConsentToOauth2AuthorizationConsent(authorizationConsent);
             oauth2AuthorizationConsentMapper.insert(oauth2AuthorizationConsent);
         } else {

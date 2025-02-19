@@ -12,26 +12,32 @@ import org.springframework.security.oauth2.server.authorization.oidc.authenticat
 import org.springframework.stereotype.Service;
 import top.wei.oauth2.configure.authentication.OidcUserInfoService;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
- *
+ * CustomOidcUserInfoMapperImpl.
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CustomOidcUserInfoMapperImpl implements Function<OidcUserInfoAuthenticationContext, OidcUserInfo> {
 
-    private final OidcUserInfoService oidcUserInfoService;
     private static final List<String> EMAIL_CLAIMS = Arrays.asList(
             StandardClaimNames.EMAIL,
             StandardClaimNames.EMAIL_VERIFIED
     );
+
     private static final List<String> PHONE_CLAIMS = Arrays.asList(
             StandardClaimNames.PHONE_NUMBER,
             StandardClaimNames.PHONE_NUMBER_VERIFIED
     );
+
     private static final List<String> PROFILE_CLAIMS = Arrays.asList(
             StandardClaimNames.NAME,
             StandardClaimNames.FAMILY_NAME,
@@ -48,6 +54,8 @@ public class CustomOidcUserInfoMapperImpl implements Function<OidcUserInfoAuthen
             StandardClaimNames.LOCALE,
             StandardClaimNames.UPDATED_AT
     );
+
+    private final OidcUserInfoService oidcUserInfoService;
 
     @Override
     public OidcUserInfo apply(OidcUserInfoAuthenticationContext authenticationContext) {

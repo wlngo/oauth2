@@ -13,10 +13,10 @@ import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
- * @author 魏亮宁
- * @date 2023年12月10日 16:54:00
+ * CaptchaUserDetailsService.
  */
 @Service
 @Slf4j
@@ -29,7 +29,7 @@ public class CaptchaUserDetailsServiceImpl implements CaptchaUserDetailsService 
     @Override
     public UserDetails loadUserByPhone(String phone) throws UsernameNotFoundException {
         UserLoginDto userLoginDto = userMapper.selectUserRoleByPhoneNumber(phone);
-        if (userLoginDto == null) {
+        if (Objects.isNull(userLoginDto)) {
             throw new UsernameNotFoundException(phone);
         }
         List<String> roleNames = userLoginDto.getRoleNames();
