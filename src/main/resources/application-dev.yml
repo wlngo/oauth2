@@ -12,6 +12,7 @@ spring:
   sql:
     init:
       schema-locations: classpath:sql/ddl.sql
+      mode: always
   session:
     redis:
       flush-mode: on_save
