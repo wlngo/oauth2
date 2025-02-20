@@ -8,6 +8,7 @@ on:
 
 jobs:
   docker:
+    environment: dev
     # Use the default runner with Docker installed
     runs-on: ubuntu-latest
     services:
