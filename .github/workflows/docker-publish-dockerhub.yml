@@ -51,7 +51,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .  # Fix the context path
+          context: ./
+          # Fix the context path
           file: ./docker/Dockerfile
           push: true
           tags: wlngo6/oauth2:latest
