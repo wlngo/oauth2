@@ -8,6 +8,7 @@ on:
 
 jobs:
   docker:
+    container: maven:3.9.9-eclipse-temurin-21
     environment: dev
     # Use the default runner with Docker installed
     runs-on: ubuntu-latest
@@ -40,9 +41,6 @@ jobs:
           restore-keys: |
             maven-
       - name: Build with Maven
-        env:
-          mysql: 127.0.0.1
-          redis: 127.0.0.1
         run: mvn --batch-mode clean package
 
       - name: Login to Docker Hub
