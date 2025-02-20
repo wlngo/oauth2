@@ -40,9 +40,10 @@ jobs:
           restore-keys: |
             maven-
       - name: Build with Maven
+        env:
+          mysql: 127.0.0.1
+          redis: 127.0.0.1
         run: |
-          export mysql=127.0.0.1
-          export redis=127.0.0.1
           ping redis
           mvn --batch-mode clean package
 
