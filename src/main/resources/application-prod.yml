@@ -19,7 +19,7 @@ spring:
       namespace: spring:session
   data:
     redis:
-      host: ${redis_host:6379}
+      host: ${redis_host:redis}
       password: ${redis.password:admin}
       #60s time out
       timeout: 60000

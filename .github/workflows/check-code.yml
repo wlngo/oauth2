@@ -1,0 +1,47 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Check Code Style
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build
+    services:
+      mysql:
+        image: mysql:latest
+        ports:
+          - 3306:3306  # 映射 MySQL 服务的端口
+        env:
+          MYSQL_ROOT_PASSWORD: root  # 设置 MySQL 根用户的密码
+          MYSQL_DATABASE: oauth2  # 创建一个测试数据库
+
+      redis:
+        image: bitnami/redis:latest
+        ports:
+          - 6379:6379  # 映射 Redis 服务的端口
+        env:
+          REDIS_PASSWORD: admin
+    container: maven:3.9.9-eclipse-temurin-21
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: /root/.m2/repository
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-
+      - name: Build with Maven
+        run: mvn clean test
