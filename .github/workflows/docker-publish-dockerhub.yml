@@ -1,8 +1,10 @@
 name: push-dockerhub
 
 on:
-  push: master
-
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 jobs:
   docker:
     runs-on: ubuntu-latest
