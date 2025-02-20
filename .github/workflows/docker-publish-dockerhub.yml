@@ -11,6 +11,9 @@ jobs:
     environment: dev
     # Use the default runner with Docker installed
     runs-on: ubuntu-latest
+    env:
+      mysql: 127.0.0.1
+      redis: 127.0.0.1
     services:
       mysql:
         image: mysql:latest
