@@ -1,9 +1,9 @@
-name: push-dockerhub
+name: 'push-dockerhub'
 
 on:
   push:
     tags:
-      - *
+      - v*
 
 jobs:
   docker:
