@@ -64,4 +64,8 @@ jobs:
           # Fix the context path
           file: ./docker/Dockerfile
           push: true
-          tags: wlngo6/oauth2:latest
+          tags: |
+            wlngo6/oauth2:latest
+            wlngo6/oauth2:${{ env.TAG }}
+            
+          
