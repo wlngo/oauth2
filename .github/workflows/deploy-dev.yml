@@ -1,11 +1,8 @@
 name: 'Push-Docker-Hub'
 
 on:
-  push:
-    branches:
-      - master
-    tags:
-      - v*
+  workflow_run:
+    workflows: ["Push-Docker-Hub"]
 
 jobs:
   deploy-dev:
