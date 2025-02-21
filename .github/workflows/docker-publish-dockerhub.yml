@@ -60,16 +60,16 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./
+          context: .
           # Fix the context path
           file: ./docker/Dockerfile
           push: true
           tags: wlngo6/oauth2:latest
       - name: Build and push tag
-        if: ${{ startsWith(github.ref, 'v') }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
         uses: docker/build-push-action@v6
         with:
-          context: ./
+          context: .
           # Fix the context path
           file: ./docker/Dockerfile
           push: true
