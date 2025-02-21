@@ -2,7 +2,8 @@ name: push-dockerhub
 
 on:
   push:
-    tags: [*]
+    tags:
+      - *
 
 jobs:
   docker:
