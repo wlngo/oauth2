@@ -73,6 +73,6 @@ jobs:
           # Fix the context path
           file: ./docker/Dockerfile
           push: true
-          tags: wlngo6/oauth2:${{ github.ref }}
+          tags: wlngo6/oauth2:${{ github.ref_name }}
             
           
