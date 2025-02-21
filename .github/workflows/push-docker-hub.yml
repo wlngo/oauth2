@@ -1,4 +1,4 @@
-name: 'push-dockerhub'
+name: 'Push-Docker-Hub'
 
 on:
   push:
@@ -8,8 +8,10 @@ on:
       - v*
 
 jobs:
-  docker:
-    environment: docker_hub
+  docker-push:
+    environment:
+      name: "docker_hub"
+      url: "https://hub.docker.com/r/wlngo6/oauth2"
     # Use the default runner with Docker installed
     runs-on: ubuntu-latest
     services:
