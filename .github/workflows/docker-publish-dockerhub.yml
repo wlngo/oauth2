@@ -64,13 +64,13 @@ jobs:
           push: true
           tags: wlngo6/oauth2:latest
       - name: Build and push tag
-        if: ${{ github.event.release.tag_name }} != ''
+        if: ${{ github.ref != '' }}
         uses: docker/build-push-action@v6
         with:
           context: ./
           # Fix the context path
           file: ./docker/Dockerfile
           push: true
-          tags: wlngo6/oauth2:${{ github.event.release.tag_name }}
+          tags: wlngo6/oauth2:${{ github.ref }}
             
           
