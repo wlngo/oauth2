@@ -7,7 +7,7 @@ on:
 
 jobs:
   docker:
-    environment: dev
+    environment: docker_hub
     # Use the default runner with Docker installed
     runs-on: ubuntu-latest
     services:
@@ -64,7 +64,7 @@ jobs:
           push: true
           tags: wlngo6/oauth2:latest
       - name: Build and push tag
-        if: ${{ github.event.release.tag_name != '' }}
+        if: ${{ github.event.release.tag_name }} != ''
         uses: docker/build-push-action@v6
         with:
           context: ./
