@@ -2,8 +2,9 @@ name: 'Deploy-Dev'
 
 on:
   workflow_run:
-    workflows: ["Push-Docker-Hub"]
-
+    workflows: [ "Push-Docker-Hub" ]
+    types:
+      - completed
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
