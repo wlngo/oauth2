@@ -17,7 +17,7 @@ on:
 jobs:
   check-code-style:
     runs-on: ubuntu-latest
-    name: build
+    name: check-code-style
     services:
       mysql:
         image: mysql:latest
