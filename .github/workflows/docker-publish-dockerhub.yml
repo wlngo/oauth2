@@ -56,7 +56,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -66,6 +65,15 @@ jobs:
           push: true
           tags: |
             wlngo6/oauth2:latest
+      - name: Build and push tag
+        if: ${{ env.TAG != '' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          # Fix the context path
+          file: ./docker/Dockerfile
+          push: true
+          tags: |
             wlngo6/oauth2:${{ env.TAG }}
             
           
