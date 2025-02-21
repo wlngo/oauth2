@@ -1,0 +1,18 @@
+name: 'Push-Docker-Hub'
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  deploy-dev:
+    needs: "docker-push"
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo "run"
+            
+          

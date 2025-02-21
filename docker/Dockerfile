@@ -6,6 +6,8 @@ WORKDIR /opt/oauth2
 # 将项目的构建文件复制到容器中
 COPY target/oauth2*.jar oauth2-service
 COPY docker/app.sh app.sh
+# 赋予脚本执行权限
+RUN chmod +x app.sh
 # 暴露应用程序运行所需的端口
 EXPOSE 8050
 # 启动应用程序
