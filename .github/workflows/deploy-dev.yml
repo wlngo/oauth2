@@ -1,4 +1,4 @@
-name: 'Push-Docker-Hub'
+name: 'Deploy-Dev'
 
 on:
   workflow_run:
