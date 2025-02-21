@@ -3,9 +3,7 @@ name: push-dockerhub
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-    tag: "*"
+    tags: [*]
 
 jobs:
   docker:
