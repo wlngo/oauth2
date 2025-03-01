@@ -11,4 +11,4 @@ RUN chmod +x app.sh
 # 暴露应用程序运行所需的端口
 EXPOSE 8050
 # 启动应用程序
-CMD ["/bin/sh", "-c", "/opt/oauth2/app.sh"]
+CMD ["/bin/sh", "-c", "/opt/oauth2-service/app.sh"]
