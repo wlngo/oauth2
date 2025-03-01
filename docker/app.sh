@@ -26,4 +26,4 @@ java -Xms1024m -Xmx1024m \
   --add-opens java.management/sun.management.counter.perf=ALL-UNNAMED \
   --add-opens java.management/sun.management.counter=ALL-UNNAMED \
   -Dspring.profiles.active=prod \
-   jar oauth2-service.jar
+   -jar oauth2-service.jar
