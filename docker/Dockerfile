@@ -2,9 +2,9 @@
 FROM eclipse-temurin:21
 
 # 设置工作目录
-WORKDIR /opt/oauth2
+WORKDIR /opt/oauth2-service
 # 将项目的构建文件复制到容器中
-COPY target/oauth2*.jar oauth2-service
+COPY target/oauth2*.jar oauth2-service.jar
 COPY docker/app.sh app.sh
 # 赋予脚本执行权限
 RUN chmod +x app.sh

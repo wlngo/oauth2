@@ -1,6 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1126
 # shellcheck disable=SC2046
+mkdir -p /opt/gc-logs
 java -Xms1024m -Xmx1024m \
   -Xlog:gc:/opt/gc-logs/gc-$(date '+%Y-%m-%d').log:time \
   -XX:+HeapDumpOnOutOfMemoryError \

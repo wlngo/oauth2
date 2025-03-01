@@ -1,6 +1,8 @@
 name: 'Push-Docker-Hub'
 
 on:
+  workflow_dispatch:
+    inputs:
   push:
     branches:
       - master
