@@ -48,7 +48,6 @@ import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
 import java.security.KeyStore;
 
 
-
 @EnableMethodSecurity
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
@@ -261,12 +260,12 @@ public class Oauth2Config {
                                     .failureHandler(authenticationFailureHandler).permitAll())
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
-                    .exceptionHandling(exceptions -> exceptions
-                            .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/login"),
-                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                            )
-                    )
+//                    .exceptionHandling(exceptions -> exceptions
+//                            .defaultAuthenticationEntryPointFor(
+//                                    new LoginUrlAuthenticationEntryPoint("/login"),
+//                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+//                            )
+                    .exceptionHandling(Customizer.withDefaults())
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
