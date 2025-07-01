@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24)
@@ -14,7 +13,7 @@ public class RedisSessionConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "oauth2", name = "domainName")
-    public CorsFilter corsFilter(Oauth2Properties oauth2Properties) {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource(Oauth2Properties oauth2Properties) {
         CorsConfiguration config = new CorsConfiguration();
         //允许白名单域名进行跨域调用
         config.addAllowedOriginPattern(oauth2Properties.getDomainName());
@@ -28,6 +27,6 @@ public class RedisSessionConfig {
         config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return source;
     }
 }
