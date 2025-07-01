@@ -238,6 +238,7 @@ public class Oauth2Config {
             AuthenticationEntryPointFailureHandler authenticationFailureHandler = new AuthenticationEntryPointFailureHandler(authenticationEntryPoint);
             RedirectLoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler = new RedirectLoginAuthenticationSuccessHandler();
             RememberMeRedirectLoginAuthenticationSuccessHandler rememberMeRedirectLoginAuthenticationSuccessHandler = new RememberMeRedirectLoginAuthenticationSuccessHandler();
+            // 禁用授权服务器端点的CSRF保护
             http
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
@@ -247,7 +248,7 @@ public class Oauth2Config {
                         authorize.anyRequest().authenticated();
                     })
 
-                    .csrf(Customizer.withDefaults())
+                    .csrf(AbstractHttpConfigurer::disable)
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
