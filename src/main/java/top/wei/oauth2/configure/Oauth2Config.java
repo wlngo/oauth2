@@ -146,11 +146,17 @@ public class Oauth2Config {
 
             http
                     //Redirect to the login page when exceptions
-                    .exceptionHandling(exceptions -> exceptions
-                            .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/login"),
-                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                            )
+//                    .exceptionHandling(exceptions -> exceptions
+//                            .defaultAuthenticationEntryPointFor(
+//                                    new LoginUrlAuthenticationEntryPoint("/login"),
+//                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+//                            )
+//                    )
+                    .exceptionHandling(exception ->
+                            exception.authenticationEntryPoint((request, response, authException) -> {
+                                // 只返回 401 无响应体
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                            })
                     )
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer
