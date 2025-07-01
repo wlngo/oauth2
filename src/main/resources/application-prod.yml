@@ -40,5 +40,5 @@ oauth2:
   jwkAlias: "www.wlngo.top"
   jwkPass: "www.wlngo.top"
   issuer: "https://wlngo.top:9400"
-  domainName: "https://*.wlngo.top:[*]"
+  domainName: "https://*.api.wlngo.top:[*]"
 
