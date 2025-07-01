@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -265,7 +266,12 @@ public class Oauth2Config {
 //                                    new LoginUrlAuthenticationEntryPoint("/login"),
 //                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
 //                            )
-                    .exceptionHandling(Customizer.withDefaults())
+                    .exceptionHandling(exception ->
+                            exception.authenticationEntryPoint((request, response, authException) -> {
+                                // 只返回 401 无响应体
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                            })
+                    )
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
