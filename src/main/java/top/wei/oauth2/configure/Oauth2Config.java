@@ -132,6 +132,7 @@ public class Oauth2Config {
                             authorize.anyRequest().authenticated()
                     )
                     .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+                    .cors(Customizer.withDefaults())
                     .with(authorizationServerConfigurer, oAuth2AuthorizationServerConfigurer -> {
                         //管理 OAuth 2.0 Authorization(s) 和 RegisteredClient 储存
                         oAuth2AuthorizationServerConfigurer.authorizationService(oAuth2AuthorizationService)
@@ -249,6 +250,7 @@ public class Oauth2Config {
                     })
 
                     .csrf(AbstractHttpConfigurer::disable)
+                    .cors(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
