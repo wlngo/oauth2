@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -71,7 +72,8 @@ public class Oauth2Config {
             http.securityMatcher(
                             "/favicon.ico",
                             "captcha/sendSms"
-                    ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                    ).
+                    authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
@@ -253,6 +255,13 @@ public class Oauth2Config {
                                 new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
                         ));
                         authorize.anyRequest().authenticated();
+                    })
+                    //添加对GET /login的匿名访问许可
+                    .authorizeHttpRequests(authorize -> {
+                        authorize
+                                .requestMatchers(HttpMethod.GET, "/login").permitAll()  // 允许GET /login匿名访问
+                                // 其他路径规则
+                                .anyRequest().authenticated();
                     })
 
                     .csrf(AbstractHttpConfigurer::disable)
