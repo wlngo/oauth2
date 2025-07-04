@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,9 +30,11 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
@@ -43,6 +46,7 @@ import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandle
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
 
 import java.security.KeyStore;
+
 
 
 @EnableMethodSecurity
@@ -67,8 +71,7 @@ public class Oauth2Config {
             http.securityMatcher(
                             "/favicon.ico",
                             "captcha/sendSms"
-                    ).
-                    authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                    ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
@@ -129,7 +132,6 @@ public class Oauth2Config {
                             authorize.anyRequest().authenticated()
                     )
                     .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
-                    .cors(Customizer.withDefaults())
                     .with(authorizationServerConfigurer, oAuth2AuthorizationServerConfigurer -> {
                         //管理 OAuth 2.0 Authorization(s) 和 RegisteredClient 储存
                         oAuth2AuthorizationServerConfigurer.authorizationService(oAuth2AuthorizationService)
@@ -143,18 +145,12 @@ public class Oauth2Config {
 
             http
                     //Redirect to the login page when exceptions
-//                    .exceptionHandling(exceptions -> exceptions
-//                            .defaultAuthenticationEntryPointFor(
-//                                    new LoginUrlAuthenticationEntryPoint("/login"),
-//                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-//                            )
-//                    )
-//                    .exceptionHandling(exception ->
-//                            exception.authenticationEntryPoint((request, response, authException) -> {
-//                                // 只返回 401 无响应体
-//                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//                            })
-//                    )
+                    .exceptionHandling(exceptions -> exceptions
+                            .defaultAuthenticationEntryPointFor(
+                                    new LoginUrlAuthenticationEntryPoint("/login"),
+                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                            )
+                    )
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer
                             .jwt(Customizer.withDefaults()));
@@ -242,7 +238,6 @@ public class Oauth2Config {
             AuthenticationEntryPointFailureHandler authenticationFailureHandler = new AuthenticationEntryPointFailureHandler(authenticationEntryPoint);
             RedirectLoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler = new RedirectLoginAuthenticationSuccessHandler();
             RememberMeRedirectLoginAuthenticationSuccessHandler rememberMeRedirectLoginAuthenticationSuccessHandler = new RememberMeRedirectLoginAuthenticationSuccessHandler();
-            // 禁用授权服务器端点的CSRF保护
             http
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
@@ -251,24 +246,24 @@ public class Oauth2Config {
                         ));
                         authorize.anyRequest().authenticated();
                     })
-                    .csrf(AbstractHttpConfigurer::disable)
-                    .cors(Customizer.withDefaults())
+
+                    .csrf(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
-                    .formLogin(Customizer.withDefaults())
+                    .formLogin(httpSecurityFormLoginConfigurer ->
+                            httpSecurityFormLoginConfigurer
+//                                    .loginPage("https://wlngo.top:9400/oauth2/login")
+                                    .loginProcessingUrl("/login")
+                                    .successHandler(loginAuthenticationSuccessHandler)
+                                    .failureHandler(authenticationFailureHandler).permitAll())
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
-//                    .exceptionHandling(exceptions -> exceptions
-//                            .defaultAuthenticationEntryPointFor(
-//                                    new LoginUrlAuthenticationEntryPoint("/login"),
-//                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-//                            )
-//                    .exceptionHandling(exception ->
-//                            exception.authenticationEntryPoint((request, response, authException) -> {
-//                                // 只返回 401 无响应体
-//                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//                            })
-//                    )
+                    .exceptionHandling(exceptions -> exceptions
+                            .defaultAuthenticationEntryPointFor(
+                                    new LoginUrlAuthenticationEntryPoint("/login"),
+                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                            )
+                    )
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
