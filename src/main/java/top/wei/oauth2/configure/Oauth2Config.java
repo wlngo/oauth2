@@ -262,10 +262,12 @@ public class Oauth2Config {
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
-//                                    .loginPage("https://wlngo.top:9400/oauth2/login")
-                                    .loginProcessingUrl("/login").permitAll()
+                                    .loginPage("/login")  // 显式声明登录页
+                                    .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
-                                    .failureHandler(authenticationFailureHandler))
+                                    .failureHandler(authenticationFailureHandler)
+                                    .permitAll()
+                    )
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
 //                    .exceptionHandling(exceptions -> exceptions
