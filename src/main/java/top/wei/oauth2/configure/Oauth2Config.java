@@ -252,8 +252,7 @@ public class Oauth2Config {
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
                                 new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
-                                new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher()),
-                                new NegatedRequestMatcher(new AntPathRequestMatcher("login", HttpMethod.GET.name()))
+                                new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
                         ));
                         authorize.anyRequest().authenticated();
                     })
@@ -264,9 +263,9 @@ public class Oauth2Config {
                     .formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
 //                                    .loginPage("https://wlngo.top:9400/oauth2/login")
-                                    .loginProcessingUrl("/login")
+                                    .loginProcessingUrl("/login").permitAll()
                                     .successHandler(loginAuthenticationSuccessHandler)
-                                    .failureHandler(authenticationFailureHandler).permitAll())
+                                    .failureHandler(authenticationFailureHandler))
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
 //                    .exceptionHandling(exceptions -> exceptions
