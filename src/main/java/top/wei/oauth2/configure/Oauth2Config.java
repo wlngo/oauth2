@@ -252,18 +252,11 @@ public class Oauth2Config {
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
                                 new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
-                                new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
+                                new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher()),
+                                new NegatedRequestMatcher(new AntPathRequestMatcher("login", HttpMethod.GET.name()))
                         ));
                         authorize.anyRequest().authenticated();
                     })
-                    //添加对GET /login的匿名访问许可
-                    .authorizeHttpRequests(authorize -> {
-                        authorize
-                                .requestMatchers(HttpMethod.GET, "/login").permitAll()  // 允许GET /login匿名访问
-                                // 其他路径规则
-                                .anyRequest().authenticated();
-                    })
-
                     .csrf(AbstractHttpConfigurer::disable)
                     .cors(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
