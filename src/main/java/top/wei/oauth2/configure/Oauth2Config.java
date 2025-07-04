@@ -32,6 +32,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -46,7 +47,6 @@ import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandle
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
 
 import java.security.KeyStore;
-
 
 
 @EnableMethodSecurity
@@ -69,15 +69,16 @@ public class Oauth2Config {
         @Order(Ordered.HIGHEST_PRECEDENCE)
         public SecurityFilterChain whiteListSecurityFilterChain(HttpSecurity http) throws Exception {
             http.securityMatcher(
+                            "/csrf",
                             "/favicon.ico",
                             "/error",
                             "/captcha/sendSms"
-                    ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                            ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
                     .sessionManagement(AbstractHttpConfigurer::disable)
-                    .csrf(AbstractHttpConfigurer::disable)
+                    .csrf(Customizer.withDefaults())
                     .cors(Customizer.withDefaults());
 
             return http.build();
@@ -248,7 +249,7 @@ public class Oauth2Config {
                         authorize.anyRequest().authenticated();
                     })
 
-                    .csrf(AbstractHttpConfigurer::disable)
+                    .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
