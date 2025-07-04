@@ -71,7 +71,8 @@ public class Oauth2Config {
         public SecurityFilterChain whiteListSecurityFilterChain(HttpSecurity http) throws Exception {
             http.securityMatcher(
                             "/favicon.ico",
-                            "captcha/sendSms"
+                            "captcha/sendSms",
+                            "/login"
                     ).
                     authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
@@ -131,9 +132,7 @@ public class Oauth2Config {
             //配置授权服务器端点
             http.securityMatcher(endpointsMatcher)
                     .authorizeHttpRequests(authorize ->
-                            // 放开 GET /login 页面
-                            authorize.requestMatchers(HttpMethod.GET, "/login").permitAll()
-                                    .anyRequest().authenticated()
+                            authorize.anyRequest().authenticated()
                     )
                     .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                     .cors(Customizer.withDefaults())
@@ -256,7 +255,6 @@ public class Oauth2Config {
                                 new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
                                 new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
                         ));
-                        authorize.requestMatchers(HttpMethod.GET, "/login").permitAll();
                         authorize.anyRequest().authenticated();
                     })
                     .csrf(AbstractHttpConfigurer::disable)
