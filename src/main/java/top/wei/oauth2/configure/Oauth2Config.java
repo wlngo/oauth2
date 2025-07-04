@@ -256,6 +256,7 @@ public class Oauth2Config {
                                 new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
                                 new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
                         ));
+                        authorize.requestMatchers(HttpMethod.GET, "/login").permitAll();
                         authorize.anyRequest().authenticated();
                     })
                     .csrf(AbstractHttpConfigurer::disable)
