@@ -131,7 +131,9 @@ public class Oauth2Config {
             //配置授权服务器端点
             http.securityMatcher(endpointsMatcher)
                     .authorizeHttpRequests(authorize ->
-                            authorize.anyRequest().authenticated()
+                            // 放开 GET /login 页面
+                            authorize.requestMatchers(HttpMethod.GET, "/login").permitAll()
+                                    .anyRequest().authenticated()
                     )
                     .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                     .cors(Customizer.withDefaults())
@@ -262,7 +264,6 @@ public class Oauth2Config {
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
-                                    .loginPage("/login")  // 显式声明登录页
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
                                     .failureHandler(authenticationFailureHandler)
