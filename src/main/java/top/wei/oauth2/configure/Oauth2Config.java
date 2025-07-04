@@ -70,13 +70,14 @@ public class Oauth2Config {
         public SecurityFilterChain whiteListSecurityFilterChain(HttpSecurity http) throws Exception {
             http.securityMatcher(
                             "/favicon.ico",
-                            "captcha/sendSms"
+                            "/error",
+                            "/captcha/sendSms"
                     ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
                     .sessionManagement(AbstractHttpConfigurer::disable)
-                    .csrf(Customizer.withDefaults())
+                    .csrf(AbstractHttpConfigurer::disable)
                     .cors(Customizer.withDefaults());
 
             return http.build();
@@ -247,7 +248,7 @@ public class Oauth2Config {
                         authorize.anyRequest().authenticated();
                     })
 
-                    .csrf(Customizer.withDefaults())
+                    .csrf(AbstractHttpConfigurer::disable)
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
