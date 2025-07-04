@@ -5,7 +5,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,11 +29,9 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
@@ -260,13 +255,7 @@ public class Oauth2Config {
                     .cors(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
-                    .formLogin(httpSecurityFormLoginConfigurer ->
-                            httpSecurityFormLoginConfigurer
-                                    .loginProcessingUrl("/login")
-                                    .successHandler(loginAuthenticationSuccessHandler)
-                                    .failureHandler(authenticationFailureHandler)
-                                    .permitAll()
-                    )
+                    .formLogin(Customizer.withDefaults())
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
 //                    .exceptionHandling(exceptions -> exceptions
