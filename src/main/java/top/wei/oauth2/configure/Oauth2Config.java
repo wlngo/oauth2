@@ -71,8 +71,7 @@ public class Oauth2Config {
         public SecurityFilterChain whiteListSecurityFilterChain(HttpSecurity http) throws Exception {
             http.securityMatcher(
                             "/favicon.ico",
-                            "captcha/sendSms",
-                            "/login"
+                            "captcha/sendSms"
                     ).
                     authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
@@ -155,12 +154,12 @@ public class Oauth2Config {
 //                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
 //                            )
 //                    )
-                    .exceptionHandling(exception ->
-                            exception.authenticationEntryPoint((request, response, authException) -> {
-                                // 只返回 401 无响应体
-                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                            })
-                    )
+//                    .exceptionHandling(exception ->
+//                            exception.authenticationEntryPoint((request, response, authException) -> {
+//                                // 只返回 401 无响应体
+//                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//                            })
+//                    )
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer
                             .jwt(Customizer.withDefaults()));
@@ -275,12 +274,12 @@ public class Oauth2Config {
 //                                    new LoginUrlAuthenticationEntryPoint("/login"),
 //                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
 //                            )
-                    .exceptionHandling(exception ->
-                            exception.authenticationEntryPoint((request, response, authException) -> {
-                                // 只返回 401 无响应体
-                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                            })
-                    )
+//                    .exceptionHandling(exception ->
+//                            exception.authenticationEntryPoint((request, response, authException) -> {
+//                                // 只返回 401 无响应体
+//                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//                            })
+//                    )
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
