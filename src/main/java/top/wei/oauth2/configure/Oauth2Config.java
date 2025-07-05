@@ -249,7 +249,7 @@ public class Oauth2Config {
                         authorize.anyRequest().authenticated();
                     })
 
-                    .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                    .csrf(Customizer.withDefaults())
                     //加载用户特定数据的核心接口
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
