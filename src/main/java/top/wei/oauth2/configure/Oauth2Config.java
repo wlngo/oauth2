@@ -257,7 +257,7 @@ public class Oauth2Config {
 //                                    .loginPage("https://wlngo.top:9400/oauth2/login")
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
-                                    .failureHandler(authenticationFailureHandler).permitAll())
+                                    .failureHandler(authenticationFailureHandler))
                     // Redirect to the login page when not authenticated from the
                     // authorization endpoint
                     .exceptionHandling(exceptions -> exceptions
