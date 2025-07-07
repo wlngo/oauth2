@@ -1,6 +1,7 @@
 # 使用官方的 OpenJDK 作为基础镜像
 FROM eclipse-temurin:21
-
+#设置时区
+ENV TZ Asia/Shanghai
 # 设置工作目录
 WORKDIR /opt/oauth2-service
 # 将项目的构建文件复制到容器中
