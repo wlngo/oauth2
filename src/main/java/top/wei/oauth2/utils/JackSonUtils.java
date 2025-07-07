@@ -36,7 +36,6 @@ public class JackSonUtils {
                     objectMapper.registerModules(new IdServerJackson2Module());
                     objectMapper.registerModule(new JavaTimeModule());
                     objectMapper.addMixIn(Collections.singletonMap(null, null).getClass(), Collections.singletonMap(null, null).getClass());
-                    objectMapper.deactivateDefaultTyping();
                 }
             }
         }
