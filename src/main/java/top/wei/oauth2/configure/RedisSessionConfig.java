@@ -4,11 +4,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisIndexedHttpSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24)
+@EnableRedisIndexedHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24)
 public class RedisSessionConfig {
 
     @Bean
