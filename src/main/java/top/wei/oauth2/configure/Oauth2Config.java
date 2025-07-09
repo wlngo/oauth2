@@ -143,15 +143,13 @@ public class Oauth2Config {
                                         oidcConfigurer.userInfoEndpoint(oidcUserInfoEndpointConfigurer ->
                                                 oidcUserInfoEndpointConfigurer.userInfoMapper(customOidcUserInfoMapper)));
                     });
-
-            http
-                    //Redirect to the login page when exceptions
-                    .exceptionHandling(exceptions -> exceptions
-                            .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/login"),
-                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                            )
-                    );
+            //Redirect to the login page when exceptions
+            http.exceptionHandling(exceptions -> exceptions
+                    .defaultAuthenticationEntryPointFor(
+                            new LoginUrlAuthenticationEntryPoint("/login"),
+                            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                    )
+            );
 
             return http.build();
         }
@@ -285,7 +283,6 @@ public class Oauth2Config {
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer
                             .jwt(Customizer.withDefaults()));
-            ;
             return http.build();
         }
 
