@@ -72,7 +72,7 @@ public class Oauth2Config {
                             "/favicon.ico",
                             "/error",
                             "/captcha/sendSms"
-                            ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                    ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
                     .securityContext(AbstractHttpConfigurer::disable)
@@ -151,10 +151,8 @@ public class Oauth2Config {
                                     new LoginUrlAuthenticationEntryPoint("/login"),
                                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                             )
-                    )
-                    // Accept access tokens for User Info and/or Client Registration
-                    .oauth2ResourceServer(resourceServer -> resourceServer
-                            .jwt(Customizer.withDefaults()));
+                    );
+
             return http.build();
         }
 
@@ -265,6 +263,7 @@ public class Oauth2Config {
                                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                             )
                     )
+
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
@@ -282,7 +281,11 @@ public class Oauth2Config {
                                                     .successHandler(loginAuthenticationSuccessHandler)
                                                     // 两个登录保持一致
                                                     .failureHandler(authenticationFailureHandler)
-                                    ));
+                                    ))
+                    // Accept access tokens for User Info and/or Client Registration
+                    .oauth2ResourceServer(resourceServer -> resourceServer
+                            .jwt(Customizer.withDefaults()));
+            ;
             return http.build();
         }
 
