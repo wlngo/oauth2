@@ -18,6 +18,6 @@ public class JackSonConfig {
      */
     @Bean
     public ObjectMapper objectMapper() {
-        return JackSonUtils.getSecurityObjectMapper();
+        return JackSonUtils.getDefaultObjectMapper();
     }
 }
