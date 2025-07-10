@@ -8,37 +8,53 @@ import org.springframework.security.oauth2.server.authorization.JdbcOAuth2Author
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
 import top.wei.oauth2.jackson2.IdServerJackson2Module;
 
-import java.util.Collections;
 import java.util.List;
 
-
 /**
- * 单例懒汉模式双检锁.
+ * 单例懒汉模式双检锁拆分：普通和安全两种 ObjectMapper.
  */
 public class JackSonUtils {
 
-    private static volatile ObjectMapper objectMapper;
+    private static volatile ObjectMapper defaultObjectMapper;
 
-    public static ObjectMapper getObjectMapper() {
-        // 第一次校验
-        if (objectMapper == null) {
-            // 确定需要创建时，再抢夺锁
+    private static volatile ObjectMapper securityObjectMapper;
+
+    /**
+     * 获取普通使用的 ObjectMapper（只注册基础模块）.
+     * @return ObjectMapper
+     */
+    public static ObjectMapper getDefaultObjectMapper() {
+        if (defaultObjectMapper == null) {
             synchronized (JackSonUtils.class) {
-                // 抢到锁后再次检验，保证只会被实例化一次
-                if (objectMapper == null) {
-                    // 当重排序成 1 -> 3 -> 2 的时候可能出问题
-                    // 通过 volatile 修复
-                    objectMapper = new ObjectMapper();
-                    ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
-                    List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
-                    objectMapper.registerModules(securityModules);
-                    objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
-                    objectMapper.registerModules(new IdServerJackson2Module());
-                    objectMapper.registerModule(new JavaTimeModule());
-                    objectMapper.addMixIn(Collections.singletonMap(null, null).getClass(), Collections.singletonMap(null, null).getClass());
+                if (defaultObjectMapper == null) {
+                    defaultObjectMapper = new ObjectMapper();
+                    // 只注册常用模块
+                    defaultObjectMapper.registerModule(new JavaTimeModule());
+                    // 如果还有其他通用模块，可以加在这里
                 }
             }
         }
-        return objectMapper;
+        return defaultObjectMapper;
+    }
+
+    /**
+     * 获取安全使用的 ObjectMapper（注册 Spring Security + OAuth2 等模块）.
+     * @return ObjectMapper
+     */
+    public static ObjectMapper getSecurityObjectMapper() {
+        if (securityObjectMapper == null) {
+            synchronized (JackSonUtils.class) {
+                if (securityObjectMapper == null) {
+                    securityObjectMapper = new ObjectMapper();
+                    ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
+                    List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
+                    securityObjectMapper.registerModules(securityModules);
+                    securityObjectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+                    securityObjectMapper.registerModules(new IdServerJackson2Module());
+                    securityObjectMapper.registerModule(new JavaTimeModule());
+                }
+            }
+        }
+        return securityObjectMapper;
     }
 }

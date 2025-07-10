@@ -145,11 +145,13 @@ public class Oauth2Config {
                     });
             //Redirect to the login page when exceptions
             http.exceptionHandling(exceptions -> exceptions
-                    .defaultAuthenticationEntryPointFor(
-                            new LoginUrlAuthenticationEntryPoint("/login"),
-                            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                            .defaultAuthenticationEntryPointFor(
+                                    new LoginUrlAuthenticationEntryPoint("/login"),
+                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                            )
                     )
-            );
+                    .oauth2ResourceServer(resourceServer -> resourceServer
+                            .jwt(Customizer.withDefaults()));
 
             return http.build();
         }

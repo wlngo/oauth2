@@ -1,5 +1,6 @@
 package top.wei.oauth2.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Data
 @Accessors(chain = true)
 @JsonSerialize
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class TokenSettingsDto implements Serializable {
 
     @Serial

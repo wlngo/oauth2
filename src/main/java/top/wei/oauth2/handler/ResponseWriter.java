@@ -32,7 +32,7 @@ public abstract class ResponseWriter {
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        String resBody = JackSonUtils.getObjectMapper().writeValueAsString(this.body(request));
+        String resBody = JackSonUtils.getDefaultObjectMapper().writeValueAsString(this.body(request));
         PrintWriter printWriter = response.getWriter();
         printWriter.print(resBody);
         printWriter.flush();

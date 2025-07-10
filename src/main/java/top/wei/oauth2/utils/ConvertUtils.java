@@ -460,7 +460,7 @@ public class ConvertUtils {
 
     public static String writeMap(Map<String, Object> data) {
         try {
-            return JackSonUtils.getObjectMapper().writeValueAsString(data);
+            return JackSonUtils.getSecurityObjectMapper().writeValueAsString(data);
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
@@ -468,7 +468,7 @@ public class ConvertUtils {
 
     public static String writeMap(Object data) {
         try {
-            return JackSonUtils.getObjectMapper().writeValueAsString(data);
+            return JackSonUtils.getSecurityObjectMapper().writeValueAsString(data);
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
@@ -477,7 +477,7 @@ public class ConvertUtils {
     public static Map<String, Object> readMap(String data) {
         try {
 
-            return JackSonUtils.getObjectMapper().readValue(data, new TypeReference<>() {
+            return JackSonUtils.getSecurityObjectMapper().readValue(data, new TypeReference<>() {
             });
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
@@ -486,7 +486,7 @@ public class ConvertUtils {
 
     public static <T> T read(String data, Class<T> t) {
         try {
-            return JackSonUtils.getObjectMapper().readValue(data, t);
+            return JackSonUtils.getSecurityObjectMapper().readValue(data, t);
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }

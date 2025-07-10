@@ -65,7 +65,7 @@ public class RedirectLoginAuthenticationSuccessHandler implements Authentication
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        String resBody = JackSonUtils.getObjectMapper().writeValueAsString(body);
+        String resBody = JackSonUtils.getDefaultObjectMapper().writeValueAsString(body);
         PrintWriter printWriter = response.getWriter();
         printWriter.print(resBody);
         printWriter.flush();
