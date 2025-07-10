@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,17 +29,16 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaUserDetailsService;
 import top.wei.oauth2.configure.authentication.impl.CustomOidcUserInfoMapperImpl;
+import top.wei.oauth2.handler.LogoutSuccessHandler;
 import top.wei.oauth2.handler.RedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
@@ -144,14 +142,8 @@ public class Oauth2Config {
                                                 oidcUserInfoEndpointConfigurer.userInfoMapper(customOidcUserInfoMapper)));
                     });
             //Redirect to the login page when exceptions
-            http.exceptionHandling(exceptions -> exceptions
-                            .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/login"),
-                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                            )
-                    )
-                    .oauth2ResourceServer(resourceServer -> resourceServer
-                            .jwt(Customizer.withDefaults()));
+            http.oauth2ResourceServer(resourceServer -> resourceServer
+                    .jwt(Customizer.withDefaults()));
 
             return http.build();
         }
@@ -255,15 +247,7 @@ public class Oauth2Config {
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
                                     .failureHandler(authenticationFailureHandler))
-                    // Redirect to the login page when not authenticated from the
-                    // authorization endpoint
-                    .exceptionHandling(exceptions -> exceptions
-                            .defaultAuthenticationEntryPointFor(
-                                    new LoginUrlAuthenticationEntryPoint("/login"),
-                                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                            )
-                    )
-
+                    .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.addLogoutHandler(new LogoutSuccessHandler()))
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
