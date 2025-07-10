@@ -38,7 +38,7 @@ import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaUserDetailsService;
 import top.wei.oauth2.configure.authentication.impl.CustomOidcUserInfoMapperImpl;
-import top.wei.oauth2.handler.LogoutSuccessHandler;
+import top.wei.oauth2.handler.CustomLogoutSuccessHandler;
 import top.wei.oauth2.handler.RedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
@@ -247,7 +247,7 @@ public class Oauth2Config {
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
                                     .failureHandler(authenticationFailureHandler))
-                    .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.addLogoutHandler(new LogoutSuccessHandler()))
+                    .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessHandler(new CustomLogoutSuccessHandler()))
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
