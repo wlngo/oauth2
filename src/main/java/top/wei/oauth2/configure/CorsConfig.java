@@ -2,12 +2,14 @@ package top.wei.oauth2.configure;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * CorsConfig.
  */
+@Configuration
 public class CorsConfig {
 
     /**
