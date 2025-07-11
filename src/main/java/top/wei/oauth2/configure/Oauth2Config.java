@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,11 +30,13 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaUserDetailsService;
@@ -69,7 +72,11 @@ public class Oauth2Config {
                             "/csrf",
                             "/favicon.ico",
                             "/error",
-                            "/captcha/sendSms"
+                            "/captcha/sendSms",
+                            "/assets/*.*",
+                            "/index.html",
+                            "/vite.svg",
+                            "/"
                     ).authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                             authorizationManagerRequestMatcherRegistry.anyRequest().permitAll())
                     .requestCache(RequestCacheConfigurer::disable)
@@ -142,6 +149,13 @@ public class Oauth2Config {
                                                 oidcUserInfoEndpointConfigurer.userInfoMapper(customOidcUserInfoMapper)));
                     });
             //Redirect to the login page when exceptions
+            //Redirect to the login page when exceptions
+            http.exceptionHandling(exceptions -> exceptions
+                    .defaultAuthenticationEntryPointFor(
+                            new LoginUrlAuthenticationEntryPoint("/#/login"),
+                            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                    )
+            );
             http.oauth2ResourceServer(resourceServer -> resourceServer
                     .jwt(Customizer.withDefaults()));
 
@@ -243,7 +257,7 @@ public class Oauth2Config {
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
-//                                    .loginPage("https://wlngo.top:9400/oauth2/login")
+                                    .loginPage("/#/login")
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
                                     .failureHandler(authenticationFailureHandler))
