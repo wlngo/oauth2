@@ -439,7 +439,7 @@ public class ConvertUtils {
         Set<GrantedAuthority> authorities = oAuth2AuthorizationConsent.getAuthorities();
         String authoritiesStr = StringUtils.collectionToDelimitedString(authorities, ",");
         Oauth2AuthorizationConsent oauth2AuthorizationConsent = new Oauth2AuthorizationConsent();
-        oauth2AuthorizationConsent.setRegisteredClientId(oauth2AuthorizationConsent.getRegisteredClientId());
+        oauth2AuthorizationConsent.setRegisteredClientId(oAuth2AuthorizationConsent.getRegisteredClientId());
         oauth2AuthorizationConsent.setPrincipalName(oAuth2AuthorizationConsent.getPrincipalName());
         oauth2AuthorizationConsent.setAuthorities(authoritiesStr);
         return oauth2AuthorizationConsent;
