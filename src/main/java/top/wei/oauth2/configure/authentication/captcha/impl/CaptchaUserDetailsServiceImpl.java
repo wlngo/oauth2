@@ -1,4 +1,4 @@
-package top.wei.oauth2.configure.authentication.impl;
+package top.wei.oauth2.configure.authentication.captcha.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

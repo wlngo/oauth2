@@ -27,126 +27,116 @@ public class User implements Serializable {
     private String userId;
 
     /**
-     * 用户名称.
+     * 用户名，唯一，用于登录.
      */
     @TableField("username")
     private String username;
 
     /**
-     * 密码.
+     * 用户密码，建议加密存储（如 bcrypt）.
      */
     @TableField("password")
     private String password;
 
     /**
-     * 昵称.
+     * 用户昵称，用于展示.
      */
     @TableField("nick_name")
     private String nickName;
 
     /**
-     * 真实姓名.
+     * 真实姓名，用于实名认证或内部识别.
      */
     @TableField("real_name")
     private String realName;
 
-
     /**
-     * 电话号码是否验证(1 是，0 否）默认否.
-     */
-    @TableField("phone_number_verified")
-    private Boolean phoneNumberVerified;
-
-    /**
-     * 手机号.
-     */
-    @TableField("phone_number")
-    private String phoneNumber;
-
-    /**
-     * 头像.
-     */
-    @TableField("avatar_url")
-    private String avatarUrl;
-
-    /**
-     * 电子邮件是否验证(1 是，0 否）默认否.
-     */
-    @TableField("email_verified")
-    private Boolean emailVerified;
-
-    /**
-     * 邮箱.
+     * 用户邮箱地址，唯一，可用于找回密码或登录.
      */
     @TableField("email")
     private String email;
 
     /**
-     * 性别   -1 未知 0 女性  1 男性.
+     * 邮箱是否已验证，1 表示已验证，0 表示未验证.
      */
-    @TableField("gender")
-    private Integer gender;
+    @TableField("email_verified")
+    private Boolean emailVerified;
 
     /**
-     * 出生日期.
+     * 手机号，唯一，可用于登录或接收验证码.
+     */
+    @TableField("phone_number")
+    private String phoneNumber;
+
+    /**
+     * 手机号是否已验证，1 表示已验证，0 表示未验证.
+     */
+    @TableField("phone_number_verified")
+    private Boolean phoneNumberVerified;
+
+    /**
+     * 性别：-1=未知，0=女，1=男.
+     */
+    @TableField("gender")
+    private Byte gender;
+
+    /**
+     * 出生日期，用于年龄计算或生日提醒.
      */
     @TableField("birthdate")
     private Date birthdate;
 
     /**
-     * 创建时间.
+     * 用户头像图片URL.
      */
-    @TableField("create_time")
-    private Date createTime;
+    @TableField("avatar_url")
+    private String avatarUrl;
 
     /**
-     * 创建人ID.
+     * 账户是否过期，1 是，0 否.
      */
-    @TableField("create_id")
-    private String createId;
+    @TableField("account_expired")
+    private Boolean accountExpired;
 
     /**
-     * 修改时间.
+     * 账户是否被锁定，1 是，0 否.
      */
-    @TableField("update_time")
-    private Date updateTime;
+    @TableField("account_locked")
+    private Boolean accountLocked;
 
     /**
-     * 修改人ID.
+     * 凭据（密码）是否过期，1 是，0 否.
      */
-    @TableField("update_id")
-    private String updateId;
+    @TableField("credentials_expired")
+    private Boolean credentialsExpired;
 
     /**
-     * 删除状态（1 是，0 否）默认否.
+     * 账户是否被禁用，1 是，0 否.
+     */
+    @TableField("disabled")
+    private Boolean disabled;
+
+    /**
+     * 是否逻辑删除，1 表示已删除，0 表示未删除.
      */
     @TableField("deleted")
     private Boolean deleted;
 
     /**
-     * 定义帐户是否已过期(1 是，0 否）默认否.
+     * 客户端密钥，用于某些认证场景.
      */
-    @TableField("accountExpired")
-    private Boolean accountExpired;
-
-    /**
-     * 定义帐户是否已锁定(1 是，0 否）默认否.
-     */
-    @TableField("accountLocked")
-    private Boolean accountLocked;
-
-    /**
-     * 定义凭据是否已过期(1 是，0 否）默认否.
-     */
-    @TableField("credentialsExpired")
-    private Boolean credentialsExpired;
-
-    /**
-     * 定义帐户是否被禁用(1 是，0 否）默认否.
-     */
-    @TableField("disabled")
-    private Boolean disabled;
-
     @TableField("secret")
     private String secret;
+
+    /**
+     * 记录用户创建时间，自动填充.
+     */
+    @TableField("created_at")
+    private Date createdAt;
+
+    /**
+     * 记录用户最后更新时间，自动更新.
+     */
+    @TableField("updated_at")
+    private Date updatedAt;
 }

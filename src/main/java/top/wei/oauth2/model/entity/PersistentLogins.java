@@ -17,6 +17,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @TableName("t_persistent_logins")
 public class PersistentLogins implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +32,4 @@ public class PersistentLogins implements Serializable {
 
     @TableField("last_used")
     private Date lastUsed;
-
-
 }

@@ -67,9 +67,9 @@ public class OidcUserInfoServiceImpl implements OidcUserInfoService {
             builder.birthdate(birthDate);
         }
 
-        if (user.getUpdateTime() != null) {
+        if (user.getUpdatedAt() != null) {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String updateTime = ft.format(user.getUpdateTime());
+            String updateTime = ft.format(user.getUpdatedAt());
             builder.updatedAt(updateTime);
         }
         return builder.build().getClaims();

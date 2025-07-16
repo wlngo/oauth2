@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wei.oauth2.mapper.Oauth2ScopeMapper">
+
+    <select id="findByClientIdAndScope" resultType="top.wei.oauth2.model.entity.Oauth2Scope">
+        SELECT * FROM oauth2_scope
+        WHERE registered_client_id = #{registeredClientId}
+        AND scope IN
+        <foreach item="scope" collection="scopes" open="(" separator="," close=")">
+            #{scope}
+        </foreach>
+    </select>
+</mapper>

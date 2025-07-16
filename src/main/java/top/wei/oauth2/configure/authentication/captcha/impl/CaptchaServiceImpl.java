@@ -1,4 +1,4 @@
-package top.wei.oauth2.configure.authentication.impl;
+package top.wei.oauth2.configure.authentication.captcha.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;

@@ -48,8 +48,8 @@ public class Role implements Serializable {
     /**
      * 创建时间.
      */
-    @TableField("create_time")
-    private Date createTime;
+    @TableField("created_at")
+    private Date createdAt;
 
     /**
      * 创建人ID.
@@ -60,8 +60,8 @@ public class Role implements Serializable {
     /**
      * 修改时间.
      */
-    @TableField("update_time")
-    private Date updateTime;
+    @TableField("updated_at")
+    private Date updatedAt;
 
     /**
      * 修改人ID.

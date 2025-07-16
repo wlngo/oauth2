@@ -25,52 +25,28 @@ public class Permission implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 权限id;权限id.
+     * 权限ID.
      */
     @TableId(value = "permission_id", type = IdType.AUTO)
     private Integer permissionId;
 
     /**
-     * 权限代码;权限代码.
+     * 权限代码.
      */
     @TableField("permission_code")
     private String permissionCode;
 
     /**
-     * 图标的名称.
-     */
-    @TableField("icon")
-    private String icon;
-
-    /**
-     * 权限名称;权限名称.
+     * 权限名称.
      */
     @TableField("permission_name")
     private String permissionName;
 
     /**
-     * 路径;路径.
-     */
-    @TableField("path")
-    private String path;
-
-    /**
-     * 类型;1为一级菜单 2为二级菜单 3为按钮.
-     */
-    @TableField("type")
-    private Integer type;
-
-    /**
-     * 父级id;父级id.
-     */
-    @TableField("parent_id")
-    private Integer parentId;
-
-    /**
      * 创建时间.
      */
-    @TableField("create_time")
-    private Date createTime;
+    @TableField("create_at")
+    private Date createAt;
 
     /**
      * 创建人ID.
@@ -81,8 +57,8 @@ public class Permission implements Serializable {
     /**
      * 修改时间.
      */
-    @TableField("update_time")
-    private Date updateTime;
+    @TableField("update_at")
+    private Date updateAt;
 
     /**
      * 修改人ID.
@@ -91,7 +67,7 @@ public class Permission implements Serializable {
     private String updateId;
 
     /**
-     * 删除状态（1-正常，0-删除）.
+     * 删除状态（1 是，0 否）.
      */
     @TableField("deleted")
     private Boolean deleted;
