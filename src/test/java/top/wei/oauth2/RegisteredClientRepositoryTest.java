@@ -21,7 +21,6 @@ import top.wei.oauth2.model.entity.Oauth2RegisteredClient;
 import top.wei.oauth2.model.entity.User;
 import top.wei.oauth2.model.entity.UserRoleRelation;
 
-import java.util.Date;
 import java.util.UUID;
 
 @SpringBootTest
