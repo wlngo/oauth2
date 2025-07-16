@@ -14,9 +14,9 @@ public interface Oauth2ScopeService {
      * Find by client id and scope list.
      *
      * @param registeredClientId the registeredClient id
-     * @param scope    the scope
+     * @param scopes    the scopes
      * @return the list
      */
-    List<Oauth2Scope> findByClientIdAndScope(String registeredClientId, Collection<String> scope);
+    List<Oauth2Scope> findByClientIdAndScope(String registeredClientId, Collection<String> scopes);
 
 }

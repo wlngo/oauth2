@@ -12,8 +12,8 @@ public interface Oauth2ScopeMapper extends BaseMapper<Oauth2Scope> {
      * 根据客户端ID和范围查询.
      *
      * @param registeredClientId registeredClientId
-     * @param scope              scope
+     * @param scopes              scopes
      * @return Oauth2Scope.
      */
-    List<Oauth2Scope> findByClientIdAndScope(String registeredClientId, Collection<String> scope);
+    List<Oauth2Scope> findByClientIdAndScope(String registeredClientId, Collection<String> scopes);
 }
