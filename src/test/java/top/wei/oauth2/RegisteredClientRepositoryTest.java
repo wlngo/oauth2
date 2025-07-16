@@ -95,8 +95,7 @@ public class RegisteredClientRepositoryTest {
                     .setPhoneNumberVerified(true)
                     .setPhoneNumber("19031580292")
                     .setEmailVerified(true)
-                    .setEmail("w2252603132@gmail.com")
-                    .setCreateTime(new Date());
+                    .setEmail("w2252603132@gmail.com");
             userMapper.insert(user);
             UserRoleRelation userRoleRelation = new UserRoleRelation();
             userRoleRelation.setUserId(user.getUserId())
