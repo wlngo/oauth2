@@ -51,19 +51,19 @@ public class UserLoginDto {
     /**
      * 定义帐户是否已过期(1 是，0 否）默认否.
      */
-    @TableField("accountExpired")
+    @TableField("account_expired")
     private Boolean accountExpired;
 
     /**
      * 定义帐户是否已锁定(1 是，0 否）默认否.
      */
-    @TableField("accountLocked")
+    @TableField("account_locked")
     private Boolean accountLocked;
 
     /**
      * 定义凭据是否已过期(1 是，0 否）默认否.
      */
-    @TableField("credentialsExpired")
+    @TableField("credentials_expired")
     private Boolean credentialsExpired;
 
     /**

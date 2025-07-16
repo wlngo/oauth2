@@ -7,9 +7,9 @@
         <result property="username" column="username"/>
         <result property="phoneNumber" column="phone_number"/>
         <result property="password" column="password"/>
-        <result property="accountExpired" column="accountExpired"/>
-        <result property="accountLocked" column="accountLocked"/>
-        <result property="credentialsExpired" column="credentialsExpired"/>
+        <result property="accountExpired" column="account_expired"/>
+        <result property="accountLocked" column="account_locked"/>
+        <result property="credentialsExpired" column="credentials_expired"/>
         <result property="disabled" column="disabled"/>
 
         <collection property="roleNames" ofType="string">
@@ -20,7 +20,7 @@
     <select id="selectUserRoleByUserName" resultType="top.wei.oauth2.model.dto.UserLoginDto"
             resultMap="userLoginDtoResultMap">
         select u.user_id, u.username,u.phone_number,
-        u.`password`,u.accountExpired,u.accountLocked,u.credentialsExpired,u.disabled,
+        u.`password`,u.account_expired,u.account_locked,u.credentials_expired,u.disabled,
         r.role_name
         from t_user u
         LEFT JOIN t_user_role_relation urr on urr.user_id = u.user_id
@@ -33,7 +33,7 @@
     <select id="selectUserRoleByPhoneNumber" resultType="top.wei.oauth2.model.dto.UserLoginDto"
             resultMap="userLoginDtoResultMap">
         select u.user_id, u.username,u.phone_number,
-        u.`password`,u.accountExpired,u.accountLocked,u.credentialsExpired,u.disabled,
+        u.`password`,u.account_expired,u.account_locked,u.credentials_expired,u.disabled,
         r.role_name
         from t_user u
         LEFT JOIN t_user_role_relation urr on urr.user_id = u.user_id
