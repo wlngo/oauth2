@@ -28,7 +28,7 @@ public class AuthorizationConsentController {
      * @param scope    scope
      * @return list Oauth2Scope
      */
-    @GetMapping("/oauth2/scope")
+    @GetMapping("/oauth2/consent/scope")
     public Rest<List<Oauth2Scope>> findByClientIdAndScope(String clientId, String scope) {
         List<String> scopeList = Arrays.stream(StringUtils.delimitedListToStringArray(scope, " ")).toList();
         return RestBody.okData(oauth2ScopeService.findByClientIdAndScope(clientId, scopeList));
