@@ -1,9 +1,8 @@
 package top.wei.oauth2.service;
 
-import top.wei.oauth2.model.entity.Oauth2Scope;
+import top.wei.oauth2.model.vo.AuthorizationConsentInfoVO;
 
-import java.util.Collection;
-import java.util.List;
+import java.security.Principal;
 
 /**
  * Oauth2ScopeService.
@@ -13,10 +12,12 @@ public interface Oauth2ScopeService {
     /**
      * Find by client id and scope list.
      *
+     * @param principal          the principal
      * @param registeredClientId the registeredClient id
-     * @param scopes    the scopes
+     * @param scope              the scopes
+     * @param state              the state
      * @return the list
      */
-    List<Oauth2Scope> findByClientIdAndScope(String registeredClientId, Collection<String> scopes);
+    AuthorizationConsentInfoVO findByClientIdAndScope(Principal principal, String registeredClientId, String scope, String state);
 
 }
