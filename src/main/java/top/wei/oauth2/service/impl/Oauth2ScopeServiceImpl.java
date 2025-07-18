@@ -58,7 +58,7 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
         });
 
         AuthorizationConsentInfoVO info = new AuthorizationConsentInfoVO();
-        info.setAuthorizationEndpoint(authorizationServerSettings.getAuthorizationEndpoint());
+        info.setAuthorizationEndpoint(authorizationServerSettings.getIssuer() + authorizationServerSettings.getAuthorizationEndpoint());
         info.setClientId(clientId);
         info.setClientName(registeredClient.getClientName());
         info.setState(state);
