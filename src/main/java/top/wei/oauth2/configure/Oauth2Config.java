@@ -54,7 +54,6 @@ import java.security.KeyStore;
 @Configuration(proxyBeanMethods = false)
 public class Oauth2Config {
 
-    private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
 
     private static final String SYSTEM_ANT_PATH = "/system/**";
 
@@ -124,9 +123,8 @@ public class Oauth2Config {
                     new OAuth2AuthorizationServerConfigurer();
             //自定义授权页
             authorizationServerConfigurer.authorizationEndpoint(oAuth2AuthorizationEndpointConfigurer
-                    -> {
-//                oAuth2AuthorizationEndpointConfigurer.consentPage(CUSTOM_CONSENT_PAGE_URI);
-            });
+                    -> oAuth2AuthorizationEndpointConfigurer.consentPage("/#" +
+                            "/oauth2/consent"));
             //todo 撤销token端点 销毁redis key
 //        authorizationServerConfigurer.tokenRevocationEndpoint()
             //获取授权服务器端点
