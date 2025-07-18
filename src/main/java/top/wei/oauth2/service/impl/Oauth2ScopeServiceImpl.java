@@ -73,19 +73,12 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
     }
 
     private String resolve(HttpServletRequest request) {
-
-        // Resolve Issuer Identifier dynamically from request
-        String path = request.getRequestURI();
-        if (!StringUtils.hasText(path)) {
-            path = "";
-        }
-        // @formatter:off
+        String contextPath = request.getContextPath();
         return UriComponentsBuilder.fromHttpUrl(UrlUtils.buildFullRequestUrl(request))
-                .replacePath(path)
+                .replacePath(contextPath)
                 .replaceQuery(null)
                 .fragment(null)
                 .build()
                 .toUriString();
-        // @formatter:on
     }
 }
