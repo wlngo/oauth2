@@ -1,5 +1,6 @@
 package top.wei.oauth2.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class AuthorizationConsentController {
     /**
      * 根据客户端ID和范围查询授权范围.
      *
+     * @param request   HttpServletRequest
      * @param principal 当前用户
      * @param clientId  clientId
      * @param scope     scope
@@ -29,7 +31,7 @@ public class AuthorizationConsentController {
      * @return list Oauth2Scope
      */
     @GetMapping("/oauth2/consent/scope")
-    public Rest<AuthorizationConsentInfoVO> findByClientIdAndScope(Principal principal, String clientId, String scope, String state) {
-        return RestBody.okData(oauth2ScopeService.findByClientIdAndScope(principal, clientId, scope, state));
+    public Rest<AuthorizationConsentInfoVO> findByClientIdAndScope(HttpServletRequest request, Principal principal, String clientId, String scope, String state) {
+        return RestBody.okData(oauth2ScopeService.findByClientIdAndScope(request, principal, clientId, scope, state));
     }
 }
