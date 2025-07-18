@@ -123,8 +123,7 @@ public class Oauth2Config {
                     new OAuth2AuthorizationServerConfigurer();
             //自定义授权页
             authorizationServerConfigurer.authorizationEndpoint(oAuth2AuthorizationEndpointConfigurer
-                    -> oAuth2AuthorizationEndpointConfigurer.consentPage("/#" +
-                            "/oauth2/consent"));
+                    -> oAuth2AuthorizationEndpointConfigurer.consentPage("/#/oauth2/consent"));
             //todo 撤销token端点 销毁redis key
 //        authorizationServerConfigurer.tokenRevocationEndpoint()
             //获取授权服务器端点
