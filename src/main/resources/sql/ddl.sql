@@ -99,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `oauth2_scope`  (
     `sort_order` int NULL DEFAULT 0 COMMENT '显示顺序（数字越小越靠前）',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX `registered_client_id`(`registered_client_id` ASC) USING BTREE
+    INDEX `registered_client_id`(`registered_client_id` ASC) USING BTREE,
+    UNIQUE KEY `uk_client_scope` (`registered_client_id`, `scope`)
     ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OAuth2 客户端权限定义表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
