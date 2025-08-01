@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import top.wei.oauth2.mapper.RoleMapper;
-import top.wei.oauth2.mapper.UserMapper;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
+import top.wei.oauth2.service.UserService;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserMapper userMapper;
+    private final UserService userService;
 
 
     private final RoleMapper roleMapper;
@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserLoginDto userLoginDto = userMapper.selectUserRoleByUserName(username);
+        UserLoginDto userLoginDto = userService.loadUserByUsername(username);
         if (userLoginDto == null) {
             throw new UsernameNotFoundException(username);
         }

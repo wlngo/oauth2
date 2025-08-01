@@ -40,6 +40,14 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://localhost:8050/oauth2-service
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: ${GITHUB_SCOPE:read:user,user:email}
+            redirect-uri: ${GITHUB_REDIRECT_URI}
+            client-name: ${GITHUB_CLIENT_NAME:GitHub 登录}
 oauth2:
   jwkPath: "www.wlngo.top.jks"
   jwkAlias: "www.wlngo.top"

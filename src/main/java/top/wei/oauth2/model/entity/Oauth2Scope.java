@@ -1,6 +1,7 @@
 package top.wei.oauth2.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,12 @@ public class Oauth2Scope implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID.
+     */
+    @TableId
+    private String id;
 
     /**
      * 客户端 ID.

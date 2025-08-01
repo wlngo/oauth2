@@ -40,7 +40,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import top.wei.oauth2.configure.authentication.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
 import top.wei.oauth2.configure.authentication.captcha.CaptchaUserDetailsService;
+import top.wei.oauth2.configure.authentication.impl.CustomDefaultOAuth2UserService;
 import top.wei.oauth2.configure.authentication.impl.CustomOidcUserInfoMapperImpl;
+import top.wei.oauth2.configure.authentication.impl.CustomOidcUserService;
 import top.wei.oauth2.handler.CustomLogoutSuccessHandler;
 import top.wei.oauth2.handler.RedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandler;
@@ -153,8 +155,8 @@ public class Oauth2Config {
                             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                     )
             );
-            http.oauth2ResourceServer(resourceServer -> resourceServer
-                    .jwt(Customizer.withDefaults()));
+//            http.oauth2ResourceServer(resourceServer -> resourceServer
+//                    .jwt(Customizer.withDefaults()));
 
             return http.build();
         }
@@ -221,6 +223,11 @@ public class Oauth2Config {
 
         private final CaptchaUserDetailsService captchaUserDetailsService;
 
+        private final CustomDefaultOAuth2UserService customDefaultOAuth2UserService;
+
+        private final CustomOidcUserService customOidcUserService;
+
+
         /**
          * 最低优先级.
          *
@@ -263,6 +270,7 @@ public class Oauth2Config {
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
                             .authenticationSuccessHandler(rememberMeRedirectLoginAuthenticationSuccessHandler)
+                            .alwaysRemember(true)
                     )
                     // 手机号验证码登录模拟
                     .with(new LoginFilterSecurityConfigurer<>(),
@@ -277,6 +285,12 @@ public class Oauth2Config {
                                                     // 两个登录保持一致
                                                     .failureHandler(authenticationFailureHandler)
                                     ))
+                    .oauth2Login(config ->
+                            config.loginPage("/#/login")
+                                    .userInfoEndpoint(userInfoEndpointConfigurer -> userInfoEndpointConfigurer
+                                            .oidcUserService(customOidcUserService)
+                                            .userService(customDefaultOAuth2UserService))
+                    )
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer
                             .jwt(Customizer.withDefaults()));

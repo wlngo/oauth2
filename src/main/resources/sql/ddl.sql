@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `oauth2_registered_client`  (
 -- Table structure for oauth2_scope
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `oauth2_scope`  (
+     `id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键',
     `registered_client_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端 ID',
     `scope` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识，如 message.read、profile',
     `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限名称，简短标题',
@@ -99,8 +100,9 @@ CREATE TABLE IF NOT EXISTS `oauth2_scope`  (
     `sort_order` int NULL DEFAULT 0 COMMENT '显示顺序（数字越小越靠前）',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX `registered_client_id`(`registered_client_id` ASC) USING BTREE,
-    UNIQUE KEY `uk_client_scope` (`registered_client_id`, `scope`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_client_scope` (`registered_client_id`,`scope`),
+    KEY `registered_client_id` (`registered_client_id`) USING BTREE
     ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OAuth2 客户端权限定义表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -167,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `t_role_permission_relation`  (
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `t_user`  (
     `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户ID，主键，唯一标识用户',
-    `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户名，唯一，用于登录',
+    `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户名，唯一，用于登录',
     `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户密码，建议加密存储（如 bcrypt）',
     `nick_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户昵称，用于展示',
     `real_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '真实姓名，用于实名认证或内部识别',
