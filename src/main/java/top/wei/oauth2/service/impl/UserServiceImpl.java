@@ -1,5 +1,6 @@
 package top.wei.oauth2.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.wei.oauth2.mapper.RoleMapper;
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String userId) {
         return userMapper.selectById(userId);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userMapper.selectOne(new QueryWrapper<User>().eq("username", username));
     }
 
     @Override

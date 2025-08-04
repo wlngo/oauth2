@@ -37,6 +37,15 @@ public interface UserService {
 
 
     /**
+     * getUserByUsername.
+     *
+     * @param username username.
+     * @return User
+     */
+    User getUserByUsername(String username);
+
+
+    /**
      * getPermissionByRoleNames.
      *
      * @param roleNames roleNames
