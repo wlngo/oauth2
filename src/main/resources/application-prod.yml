@@ -45,7 +45,7 @@ spring:
           github:
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
-            scope: ${GITHUB_SCOPE:read:user user:email}
+            scope: ${GITHUB_SCOPE:read:user,user:email}
             redirect-uri: ${GITHUB_REDIRECT_URI}
             client-name: ${GITHUB_CLIENT_NAME:GitHub 登录}
 oauth2:
