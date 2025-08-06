@@ -1,5 +1,7 @@
 package top.wei.oauth2.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -13,6 +15,8 @@ import java.util.Map;
 /**
  * CustomOidcUserDto.
  */
+@JsonSerialize
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class CustomOidcUserDto extends CustomOAuth2UserDto implements OidcUser {
 
     private final OidcIdToken idToken;

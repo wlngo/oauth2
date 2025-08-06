@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -28,6 +30,8 @@ import org.springframework.util.Assert;
  *
  * @see CustomOAuth2UserDto
  */
+@JsonSerialize
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class CustomOAuth2UserDto implements OAuth2User, Serializable {
 
     @Serial
