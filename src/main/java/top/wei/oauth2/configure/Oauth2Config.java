@@ -45,7 +45,6 @@ import top.wei.oauth2.configure.authentication.impl.CustomOidcUserInfoMapperImpl
 import top.wei.oauth2.configure.authentication.impl.CustomOidcUserService;
 import top.wei.oauth2.handler.CustomLogoutSuccessHandler;
 import top.wei.oauth2.handler.RedirectLoginAuthenticationSuccessHandler;
-import top.wei.oauth2.handler.RememberMeRedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.handler.SimpleAuthenticationEntryPoint;
 
 import java.security.KeyStore;
@@ -246,7 +245,6 @@ public class Oauth2Config {
             SimpleAuthenticationEntryPoint authenticationEntryPoint = new SimpleAuthenticationEntryPoint();
             AuthenticationEntryPointFailureHandler authenticationFailureHandler = new AuthenticationEntryPointFailureHandler(authenticationEntryPoint);
             RedirectLoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler = new RedirectLoginAuthenticationSuccessHandler();
-            RememberMeRedirectLoginAuthenticationSuccessHandler rememberMeRedirectLoginAuthenticationSuccessHandler = new RememberMeRedirectLoginAuthenticationSuccessHandler();
             http
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
@@ -269,7 +267,6 @@ public class Oauth2Config {
                     .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
                             .userDetailsService(userDetailsService).tokenValiditySeconds(60 * 60 * 24 * 7)
                             .tokenRepository(persistentTokenRepository)
-                            .authenticationSuccessHandler(rememberMeRedirectLoginAuthenticationSuccessHandler)
                             .alwaysRemember(true)
                     )
                     // 手机号验证码登录模拟
