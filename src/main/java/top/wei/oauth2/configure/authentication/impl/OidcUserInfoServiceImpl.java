@@ -42,22 +42,20 @@ public class OidcUserInfoServiceImpl implements OidcUserInfoService {
                 .nickname(user.getNickName())
                 .preferredUsername(username)
                 .picture(user.getAvatarUrl())
-                .website("https://www.weiliangning.top/")
                 .email(user.getEmail())
                 .emailVerified(user.getEmailVerified())
                 .phoneNumber(user.getPhoneNumber())
                 .phoneNumberVerified(user.getPhoneNumberVerified())
-                .address("address")
                 //自定义claim
                 .claim("username", username)
                 .zoneinfo(TimeZone.getDefault().getID())
                 .locale(Locale.getDefault().getLanguage());
 
         if (user.getGender() != null) {
-            if (user.getGender().equals(0)) {
+            if (user.getGender().intValue() == 0) {
                 builder.gender("女");
             }
-            if (user.getGender().equals(1)) {
+            if (user.getGender().intValue() == 1) {
                 builder.gender("男");
             }
         }
