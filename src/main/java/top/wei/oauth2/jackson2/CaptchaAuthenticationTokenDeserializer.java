@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.MissingNode;
 import org.springframework.security.core.GrantedAuthority;
-import top.wei.oauth2.configure.authentication.captcha.CaptchaAuthenticationToken;
+import top.wei.oauth2.security.login.captcha.authentication.CaptchaAuthenticationToken;
 
 import java.io.IOException;
 import java.util.List;

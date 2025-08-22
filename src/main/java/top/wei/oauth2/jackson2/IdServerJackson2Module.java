@@ -3,7 +3,7 @@ package top.wei.oauth2.jackson2;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
-import top.wei.oauth2.configure.authentication.captcha.CaptchaAuthenticationToken;
+import top.wei.oauth2.security.login.captcha.authentication.CaptchaAuthenticationToken;
 
 public class IdServerJackson2Module extends SimpleModule {
 

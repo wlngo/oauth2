@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.wei.oauth2.configure.authentication.captcha.CaptchaService;
+import top.wei.oauth2.security.login.captcha.service.CaptchaService;
 import top.wei.oauth2.utils.Rest;
 import top.wei.oauth2.utils.RestBody;
 
