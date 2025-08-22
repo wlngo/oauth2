@@ -62,7 +62,8 @@ public class CustomMapOAuth2AccessTokenResponseConverter implements Converter<Ma
     private static Set<String> getScopes(Map<String, Object> tokenResponseParameters) {
         if (tokenResponseParameters.containsKey(OAuth2ParameterNames.SCOPE)) {
             String scope = getParameterValue(tokenResponseParameters, OAuth2ParameterNames.SCOPE);
-            return new HashSet<>(Arrays.asList(StringUtils.tokenizeToStringArray(scope, "[,\\s]+")));
+            assert scope != null;
+            return new HashSet<>(Arrays.asList( scope.split("[,\\s]+")));
         }
         return Collections.emptySet();
     }
