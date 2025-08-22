@@ -9,7 +9,6 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.GenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.security.oauth2.core.endpoint.DefaultMapOAuth2AccessTokenResponseConverter;
 import org.springframework.security.oauth2.core.endpoint.DefaultOAuth2AccessTokenResponseMapConverter;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.util.Assert;
@@ -19,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- *
+ * CustomOAuth2AccessTokenResponseHttpMessageConverter.
  */
 public class CustomOAuth2AccessTokenResponseHttpMessageConverter extends AbstractHttpMessageConverter<OAuth2AccessTokenResponse> {
 
@@ -30,7 +29,7 @@ public class CustomOAuth2AccessTokenResponseHttpMessageConverter extends Abstrac
 
     private GenericHttpMessageConverter<Object> jsonMessageConverter = getJsonMessageConverter();
 
-    private Converter<Map<String, Object>, OAuth2AccessTokenResponse> accessTokenResponseConverter = new DefaultMapOAuth2AccessTokenResponseConverter();
+    private Converter<Map<String, Object>, OAuth2AccessTokenResponse> accessTokenResponseConverter = new CustomMapOAuth2AccessTokenResponseConverter();
 
     private Converter<OAuth2AccessTokenResponse, Map<String, Object>> accessTokenResponseParametersConverter = new DefaultOAuth2AccessTokenResponseMapConverter();
 
