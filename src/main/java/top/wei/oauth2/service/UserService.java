@@ -3,6 +3,7 @@ package top.wei.oauth2.service;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
+import top.wei.oauth2.model.vo.UserInfoVo;
 
 import java.util.List;
 
@@ -52,4 +53,12 @@ public interface UserService {
      * @return PermissionDto
      */
     List<PermissionDto> getPermissionByRoleNames(List<String> roleNames);
+
+    /**
+     * getUserInfo.
+     *
+     * @param username username
+     * @return UserInfoVo
+     */
+    UserInfoVo getUserInfo(String username);
 }

@@ -1,7 +1,7 @@
 package top.wei.oauth2.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import top.wei.oauth2.model.vo.AuthorizationConsentInfoVO;
+import top.wei.oauth2.model.vo.AuthorizationConsentInfoVo;
 
 import java.security.Principal;
 
@@ -20,6 +20,6 @@ public interface Oauth2ScopeService {
      * @param state              the state
      * @return the list
      */
-    AuthorizationConsentInfoVO findByClientIdAndScope(HttpServletRequest request, Principal principal, String registeredClientId, String scope, String state);
+    AuthorizationConsentInfoVo findByClientIdAndScope(HttpServletRequest request, Principal principal, String registeredClientId, String scope, String state);
 
 }

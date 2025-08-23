@@ -8,6 +8,7 @@ import top.wei.oauth2.mapper.UserMapper;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
+import top.wei.oauth2.model.vo.UserInfoVo;
 import top.wei.oauth2.service.UserService;
 
 import java.util.List;
@@ -41,12 +42,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userMapper.selectOne(new QueryWrapper<User>().eq("username", username));
+        return userMapper.selectOne(new QueryWrapper<User>()
+                .eq("username", username)
+                .eq("deleted", 0));
     }
 
     @Override
     public List<PermissionDto> getPermissionByRoleNames(List<String> roleNames) {
         return roleMapper.selectPermissionByRoleNames(roleNames);
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(String username) {
+        return userMapper.selectUserInfoByUserName(username);
     }
 
 

@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 import top.wei.oauth2.mapper.Oauth2ScopeMapper;
 import top.wei.oauth2.model.entity.Oauth2Scope;
-import top.wei.oauth2.model.vo.AuthorizationConsentInfoVO;
+import top.wei.oauth2.model.vo.AuthorizationConsentInfoVo;
 import top.wei.oauth2.service.Oauth2ScopeService;
 
 import java.security.Principal;
@@ -39,7 +39,7 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
 
     private final AuthorizationServerSettings authorizationServerSettings;
 
-    public AuthorizationConsentInfoVO findByClientIdAndScope(HttpServletRequest request, Principal principal, String clientId, String scope, String state) {
+    public AuthorizationConsentInfoVo findByClientIdAndScope(HttpServletRequest request, Principal principal, String clientId, String scope, String state) {
         RegisteredClient registeredClient = this.registeredClientRepository.findByClientId(clientId);
         assert registeredClient != null;
         String id = registeredClient.getId();
@@ -60,7 +60,7 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
             }
         });
         String issuer = resolve(request);
-        AuthorizationConsentInfoVO info = new AuthorizationConsentInfoVO();
+        AuthorizationConsentInfoVo info = new AuthorizationConsentInfoVo();
         info.setAuthorizationEndpoint(issuer + authorizationServerSettings.getAuthorizationEndpoint());
         info.setClientId(clientId);
         info.setClientName(registeredClient.getClientName());

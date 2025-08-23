@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Data
 @Accessors(chain = true)
-public class AuthorizationConsentInfoVO {
+public class AuthorizationConsentInfoVo {
 
     private String authorizationEndpoint;
 

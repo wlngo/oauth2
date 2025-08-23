@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.wei.oauth2.model.vo.AuthorizationConsentInfoVO;
+import top.wei.oauth2.model.vo.AuthorizationConsentInfoVo;
 import top.wei.oauth2.service.Oauth2ScopeService;
 import top.wei.oauth2.utils.Rest;
 import top.wei.oauth2.utils.RestBody;
@@ -31,7 +31,7 @@ public class AuthorizationConsentController {
      * @return list Oauth2Scope
      */
     @GetMapping("/oauth2/consent/scope")
-    public Rest<AuthorizationConsentInfoVO> findByClientIdAndScope(HttpServletRequest request, Principal principal, String clientId, String scope, String state) {
+    public Rest<AuthorizationConsentInfoVo> findByClientIdAndScope(HttpServletRequest request, Principal principal, String clientId, String scope, String state) {
         return RestBody.okData(oauth2ScopeService.findByClientIdAndScope(request, principal, clientId, scope, state));
     }
 }

@@ -89,6 +89,7 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
             uid = userRequest.getClientRegistration().getRegistrationId() + "_" + stringObjectMap.get(userNameAttributeName);
         }
         User user = userService.getUserByUsername(uid);
+        //TODO CHECK user status
         if (user == null) {
             // 如果用户不存在，则创建用户
             User userT = new User();

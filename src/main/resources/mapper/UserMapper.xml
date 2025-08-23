@@ -44,4 +44,25 @@
         </where>
 
     </select>
+    <select id="selectUserInfoByUserName" resultType="top.wei.oauth2.model.vo.UserInfoVo">
+        SELECT
+        u.user_id,
+        u.username,
+        u.nick_name,
+        u.real_name,
+        u.email,
+        u.email_verified,
+        u.phone_number,
+        u.phone_number_verified,
+        u.gender,
+        u.birthdate,
+        u.avatar_url,
+        u.created_at,
+        u.updated_at
+        FROM t_user u
+        <where>
+            u.username = #{username}
+            AND u.deleted = 0
+        </where>
+    </select>
 </mapper>

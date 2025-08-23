@@ -78,6 +78,7 @@ public class CustomDefaultOAuth2UserService implements OAuth2UserService<OAuth2U
 
         String uid = userRequest.getClientRegistration().getRegistrationId() + "_" + attributes.get(userNameAttributeName);
         User user = userService.getUserByUsername(uid);
+        //TODO CHECK user status
         if (user == null) {
             // 如果用户不存在，则创建用户
             String registrationId = userRequest.getClientRegistration().getRegistrationId();
