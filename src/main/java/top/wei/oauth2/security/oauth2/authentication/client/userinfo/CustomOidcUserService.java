@@ -1,4 +1,4 @@
-package top.wei.oauth2.security.oauth2.authentication.client.oidc;
+package top.wei.oauth2.security.oauth2.authentication.client.userinfo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.TypeDescriptor;
@@ -35,8 +35,11 @@ import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
 import top.wei.oauth2.service.UserService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -91,7 +94,15 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
             User userT = new User();
             PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
             userT.setUsername(uid)
-                    .setPassword(delegatingPasswordEncoder.encode(UUID.randomUUID().toString()));
+                    .setPassword(delegatingPasswordEncoder.encode(UUID.randomUUID().toString()))
+                    .setNickName(userInfo.getNickName())
+                    .setEmail(userInfo.getEmail())
+                    .setEmailVerified(userInfo.getEmailVerified())
+                    .setPhoneNumber(userInfo.getPhoneNumber())
+                    .setPhoneNumberVerified(userInfo.getPhoneNumberVerified())
+                    .setGender(convertGender(userInfo.getGender()))
+                    .setBirthdate(convertBirthdate(userInfo.getBirthdate()))
+                    .setAvatarUrl(userInfo.getPicture());
             userService.createUser(userT);
             user = userT;
         }
@@ -104,6 +115,41 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         return new CustomOidcUserDto(authorities, userRequest.getIdToken(), userInfo, userLoginDto.getUsername());
     }
 
+
+    /**
+     * convertBirthdate.
+     *
+     * @param birthdate birthdate
+     * @return Date.
+     */
+    private Date convertBirthdate(String birthdate) {
+        if (birthdate == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return sdf.parse(birthdate);
+        } catch (ParseException ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * convertGender.
+     *
+     * @param gender gender
+     * @return Byte.
+     */
+    private Byte convertGender(String gender) {
+        if ("male".equalsIgnoreCase(gender)) {
+            return 1;
+        }
+        if ("female".equalsIgnoreCase(gender)) {
+            return 0;
+        }
+        return -1;
+
+    }
 
     /**
      * Returns the default {@link Converter}'s used for type conversion of claim values

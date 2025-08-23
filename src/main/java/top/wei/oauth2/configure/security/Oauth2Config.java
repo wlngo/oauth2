@@ -44,7 +44,7 @@ import top.wei.oauth2.security.login.captcha.service.CaptchaUserDetailsService;
 import top.wei.oauth2.security.oauth2.authentication.client.endpoint.CustomAuthorizationCodeTokenResponseClient;
 import top.wei.oauth2.security.oauth2.authentication.client.userinfo.CustomDefaultOAuth2UserService;
 import top.wei.oauth2.security.oauth2.authentication.client.oidc.CustomOidcUserInfoMapperImpl;
-import top.wei.oauth2.security.oauth2.authentication.client.oidc.CustomOidcUserService;
+import top.wei.oauth2.security.oauth2.authentication.client.userinfo.CustomOidcUserService;
 import top.wei.oauth2.security.login.handler.CustomLogoutSuccessHandler;
 import top.wei.oauth2.security.login.handler.RedirectLoginAuthenticationSuccessHandler;
 import top.wei.oauth2.security.login.handler.SimpleAuthenticationEntryPoint;

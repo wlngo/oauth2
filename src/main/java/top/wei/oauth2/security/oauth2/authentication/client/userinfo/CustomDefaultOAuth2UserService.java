@@ -7,8 +7,6 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequestEntityConverter;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -29,6 +27,7 @@ import top.wei.oauth2.model.dto.CustomOAuth2UserDto;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
+import top.wei.oauth2.security.oauth2.authentication.client.userinfo.convert.UserConvert;
 import top.wei.oauth2.service.UserService;
 
 import java.util.Collection;
@@ -36,7 +35,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * CustomDefaultOAuth2UserService.
@@ -62,6 +60,8 @@ public class CustomDefaultOAuth2UserService implements OAuth2UserService<OAuth2U
 
     private final UserService userService;
 
+    private final UserConvertFactory userConvertFactory;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         Assert.notNull(userRequest, "userRequest cannot be null");
@@ -80,10 +80,9 @@ public class CustomDefaultOAuth2UserService implements OAuth2UserService<OAuth2U
         User user = userService.getUserByUsername(uid);
         if (user == null) {
             // 如果用户不存在，则创建用户
-            User userT = new User();
-            PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-            userT.setUsername(uid)
-                    .setPassword(delegatingPasswordEncoder.encode(UUID.randomUUID().toString()));
+            String registrationId = userRequest.getClientRegistration().getRegistrationId();
+            UserConvert userConvert = userConvertFactory.getUserConvert(registrationId);
+            User userT = userConvert.createUser(registrationId, uid, attributes);
             userService.createUser(userT);
             user = userT;
         }
