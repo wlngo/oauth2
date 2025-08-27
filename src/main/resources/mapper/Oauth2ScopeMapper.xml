@@ -5,9 +5,11 @@
     <select id="findByClientIdAndScope" resultType="top.wei.oauth2.model.entity.Oauth2Scope">
         SELECT * FROM oauth2_scope
         WHERE registered_client_id = #{registeredClientId}
-        AND scope IN
-        <foreach item="scope" collection="scopes" open="(" separator="," close=")">
-            #{scope}
-        </foreach>
+        <if test="scopes != null and scopes.size() > 0">
+            AND scope IN
+            <foreach item="scope" collection="scopes" open="(" separator="," close=")">
+                #{scope}
+            </foreach>
+        </if>
     </select>
 </mapper>
