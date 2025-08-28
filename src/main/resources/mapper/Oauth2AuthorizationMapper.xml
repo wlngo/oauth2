@@ -3,19 +3,15 @@
 <mapper namespace="top.wei.oauth2.mapper.Oauth2AuthorizationMapper">
 
     <select id="findByTokenType" resultType="top.wei.oauth2.model.entity.Oauth2Authorization">
-
-        SELECT * FROM oauth2_authorization WHERE state_index_sha256 =#{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE authorization_code_value_index_sha256 = #{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE access_token_value_index_sha256 = #{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE oidc_id_token_value__index_sha256 = #{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE refresh_token_value_index_sha256 = #{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE user_code_value_index_sha256 = #{tokenIndexSha256}
-        UNION
-        SELECT * FROM oauth2_authorization WHERE device_code_value_index_sha256 = #{tokenIndexSha256}
+        SELECT *
+        FROM oauth2_authorization
+        WHERE
+            state_index_sha256 = #{tokenIndexSha256}
+           OR authorization_code_value_index_sha256 = #{tokenIndexSha256}
+           OR access_token_value_index_sha256 = #{tokenIndexSha256}
+           OR oidc_id_token_value__index_sha256 = #{tokenIndexSha256}
+           OR refresh_token_value_index_sha256 = #{tokenIndexSha256}
+           OR user_code_value_index_sha256 = #{tokenIndexSha256}
+           OR device_code_value_index_sha256 = #{tokenIndexSha256}
     </select>
 </mapper>

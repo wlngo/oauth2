@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -35,13 +36,12 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import top.wei.oauth2.configure.Oauth2Properties;
 import top.wei.oauth2.security.login.captcha.configurer.LoginFilterSecurityConfigurer;
 import top.wei.oauth2.security.login.captcha.service.CaptchaService;
 import top.wei.oauth2.security.login.captcha.service.CaptchaUserDetailsService;
-import top.wei.oauth2.security.oauth2.authentication.client.endpoint.CustomAuthorizationCodeTokenResponseClient;
 import top.wei.oauth2.security.oauth2.authentication.client.userinfo.CustomDefaultOAuth2UserService;
 import top.wei.oauth2.security.oauth2.authentication.client.oidc.CustomOidcUserInfoMapperImpl;
 import top.wei.oauth2.security.oauth2.authentication.client.userinfo.CustomOidcUserService;
@@ -228,7 +228,7 @@ public class Oauth2Config {
 
         private final CustomOidcUserService customOidcUserService;
 
-        private final CustomAuthorizationCodeTokenResponseClient customAuthorizationCodeTokenResponseClient;
+        private final RestClientAuthorizationCodeTokenResponseClient restClientAuthorizationCodeTokenResponseClient;
 
         /**
          * 最低优先级.
@@ -251,7 +251,7 @@ public class Oauth2Config {
             http
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(new AndRequestMatcher(
-                                new NegatedRequestMatcher(new AntPathRequestMatcher(SYSTEM_ANT_PATH)),
+                                new NegatedRequestMatcher(RegexRequestMatcher.regexMatcher(SYSTEM_ANT_PATH)),
                                 new NegatedRequestMatcher(authorizationServerFilterChain.getRequestMatcher())
                         ));
                         authorize.anyRequest().authenticated();
@@ -291,7 +291,7 @@ public class Oauth2Config {
                                             .oidcUserService(customOidcUserService)
                                             .userService(customDefaultOAuth2UserService))
                                     .tokenEndpoint(tokenEndpointConfig
-                                            -> tokenEndpointConfig.accessTokenResponseClient(customAuthorizationCodeTokenResponseClient))
+                                            -> tokenEndpointConfig.accessTokenResponseClient(restClientAuthorizationCodeTokenResponseClient))
                     )
                     // Accept access tokens for User Info and/or Client Registration
                     .oauth2ResourceServer(resourceServer -> resourceServer

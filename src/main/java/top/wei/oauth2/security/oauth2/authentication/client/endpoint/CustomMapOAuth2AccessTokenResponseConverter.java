@@ -50,6 +50,9 @@ public class CustomMapOAuth2AccessTokenResponseConverter implements Converter<Ma
         if (OAuth2AccessToken.TokenType.BEARER.getValue()
                 .equalsIgnoreCase(getParameterValue(tokenResponseParameters, OAuth2ParameterNames.TOKEN_TYPE))) {
             return OAuth2AccessToken.TokenType.BEARER;
+        } else if (OAuth2AccessToken.TokenType.DPOP.getValue()
+                .equalsIgnoreCase(getParameterValue(tokenResponseParameters, OAuth2ParameterNames.TOKEN_TYPE))) {
+            return OAuth2AccessToken.TokenType.DPOP;
         }
         return null;
     }
