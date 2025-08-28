@@ -9,7 +9,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.util.Assert;
 import top.wei.oauth2.security.login.captcha.authentication.CaptchaAuthenticationToken;
 
@@ -22,7 +22,7 @@ public class CaptchaAuthenticationFilter extends AbstractAuthenticationProcessin
 
     public static final String SPRING_SECURITY_FORM_CAPTCHA_KEY = "captcha";
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login/captcha",
+    private static final RegexRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new RegexRequestMatcher("/login/captcha",
             "POST");
 
     private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;

@@ -58,7 +58,7 @@ import java.security.KeyStore;
 public class Oauth2Config {
 
 
-    private static final String SYSTEM_ANT_PATH = "/system/**";
+    private static final String SYSTEM_ANT_PATH = "/system/.*";
 
 
     /**
