@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import top.wei.oauth2.mapper.PermissionMapper;
 import top.wei.oauth2.security.login.captcha.service.CaptchaUserDetailsService;
-import top.wei.oauth2.mapper.RoleMapper;
 import top.wei.oauth2.mapper.UserMapper;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
@@ -24,7 +24,7 @@ import java.util.Objects;
 public class CaptchaUserDetailsServiceImpl implements CaptchaUserDetailsService {
     private final UserMapper userMapper;
 
-    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
 
     @Override
     public UserDetails loadUserByPhone(String phone) throws UsernameNotFoundException {
@@ -35,7 +35,7 @@ public class CaptchaUserDetailsServiceImpl implements CaptchaUserDetailsService 
         List<String> roleNames = userLoginDto.getRoleNames();
         String[] roles = roleNames.toArray(new String[0]);
 
-        List<PermissionDto> permissionDtoS = roleMapper.selectPermissionByRoleNames(roleNames);
+        List<PermissionDto> permissionDtoS = permissionMapper.selectPermissionByUserid(userLoginDto.getUserId());
         String[] authorities = permissionDtoS.stream().map(PermissionDto::getPermissionCode).toArray(String[]::new);
 
         return User.withUsername(userLoginDto.getUsername())

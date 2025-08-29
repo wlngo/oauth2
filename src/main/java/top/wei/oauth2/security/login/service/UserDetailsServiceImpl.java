@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import top.wei.oauth2.mapper.RoleMapper;
+import top.wei.oauth2.mapper.PermissionMapper;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.service.UserService;
@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
 
 
-    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<String> roleNames = userLoginDto.getRoleNames();
         String[] roles = roleNames.toArray(new String[0]);
 
-        List<PermissionDto> permissionDtoS = roleMapper.selectPermissionByRoleNames(roleNames);
+        List<PermissionDto> permissionDtoS = permissionMapper.selectPermissionByUserid(userLoginDto.getUserId());
         String[] authorities = permissionDtoS.stream().map(PermissionDto::getPermissionCode).toArray(String[]::new);
 
         return User.withUsername(userLoginDto.getUsername())

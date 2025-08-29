@@ -2,25 +2,4 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.wei.oauth2.mapper.RoleMapper">
 
-    <select id="selectPermissionByRoleNames" resultType="PermissionDTO">
-        SELECT
-        p.permission_id,
-        p.permission_code
-        FROM t_role r
-        LEFT JOIN t_role_permission_relation rpr ON rpr.role_id = r.role_id
-        LEFT JOIN t_permission p ON p.permission_id = rpr.permission_id
-        <where>
-            r.deleted = 0
-            AND p.deleted = 0
-            <if test="roleNames != null and roleNames.size > 0">
-                AND r.role_name IN
-                <foreach collection="roleNames" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="roleNames == null or roleNames.size == 0">
-                AND r.role_name IS NULL
-            </if>
-        </where>
-    </select>
 </mapper>
