@@ -49,10 +49,10 @@ public interface UserService {
     /**
      * getPermissionByRoleNames.
      *
-     * @param roleNames roleNames
+     * @param userId userId
      * @return PermissionDto
      */
-    List<PermissionDto> getPermissionByRoleNames(List<String> roleNames);
+    List<PermissionDto> getPermissionByUserid(String userId);
 
     /**
      * getUserInfo.

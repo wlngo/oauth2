@@ -3,7 +3,7 @@ package top.wei.oauth2.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import top.wei.oauth2.mapper.RoleMapper;
+import top.wei.oauth2.mapper.PermissionMapper;
 import top.wei.oauth2.mapper.UserMapper;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
 
     @Override
     public UserLoginDto loadUserByUsername(String username) {
@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PermissionDto> getPermissionByRoleNames(List<String> roleNames) {
-        return roleMapper.selectPermissionByRoleNames(roleNames);
+    public List<PermissionDto> getPermissionByUserid(String userId) {
+        return permissionMapper.selectPermissionByUserid(userId);
     }
 
     @Override

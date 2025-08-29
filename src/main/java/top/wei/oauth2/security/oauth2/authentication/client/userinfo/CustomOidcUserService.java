@@ -108,8 +108,7 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
             user = userT;
         }
         UserLoginDto userLoginDto = userService.loadUserByUsername(user.getUsername());
-        List<String> roleNames = userLoginDto.getRoleNames();
-        List<PermissionDto> permissionByRoleNames = userService.getPermissionByRoleNames(roleNames);
+        List<PermissionDto> permissionByRoleNames = userService.getPermissionByUserid(user.getUserId());
         for (PermissionDto permissionByRoleName : permissionByRoleNames) {
             authorities.add(new SimpleGrantedAuthority(permissionByRoleName.getPermissionCode()));
         }
