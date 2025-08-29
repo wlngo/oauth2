@@ -2,6 +2,7 @@ package top.wei.oauth2.security.login.captcha.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,7 @@ import top.wei.oauth2.model.dto.UserLoginDto;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * CaptchaUserDetailsService.
@@ -32,11 +34,7 @@ public class CaptchaUserDetailsServiceImpl implements CaptchaUserDetailsService 
         if (Objects.isNull(userLoginDto)) {
             throw new UsernameNotFoundException(phone);
         }
-        List<String> roleNames = userLoginDto.getRoleNames();
-        String[] roles = roleNames.toArray(new String[0]);
-
-        List<PermissionDto> permissionDtoS = permissionMapper.selectPermissionByUserid(userLoginDto.getUserId());
-        String[] authorities = permissionDtoS.stream().map(PermissionDto::getPermissionCode).toArray(String[]::new);
+        List<SimpleGrantedAuthority> authorities = buildAuthorities(userLoginDto);
 
         return User.withUsername(userLoginDto.getUsername())
                 .password(userLoginDto.getPassword())
@@ -44,8 +42,32 @@ public class CaptchaUserDetailsServiceImpl implements CaptchaUserDetailsService 
                 .accountLocked(userLoginDto.getAccountLocked())
                 .credentialsExpired(userLoginDto.getCredentialsExpired())
                 .disabled(userLoginDto.getDisabled())
-                .roles(roles)
                 .authorities(authorities)
                 .build();
+    }
+
+    /**
+     * buildAuthorities.
+     *
+     * @param userLoginDto userLoginDto
+     * @return list of SimpleGrantedAuthority
+     */
+    private List<SimpleGrantedAuthority> buildAuthorities(UserLoginDto userLoginDto) {
+        // 处理角色，确保有 ROLE_ 前缀
+        List<String> roles = userLoginDto.getRoleNames().stream()
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                .toList();
+
+        // 获取权限
+        List<String> permissions = permissionMapper
+                .selectPermissionByUserid(userLoginDto.getUserId())
+                .stream()
+                .map(PermissionDto::getPermissionCode)
+                .toList();
+
+        // 合并角色和权限，转为 SimpleGrantedAuthority
+        return Stream.concat(roles.stream(), permissions.stream())
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 }
