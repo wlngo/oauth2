@@ -1,13 +1,14 @@
 package top.wei.oauth2.utils;
 
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
 public class RestBody<T> implements Rest<T>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = -7616216747521482608L;
 
     private int code = 200;
@@ -42,18 +43,10 @@ public class RestBody<T> implements Rest<T>, Serializable {
         return restBody;
     }
 
-
     public static <T> Rest<T> build(int httpStatus, T data, String msg, boolean identifier) {
         Rest<T> restBody = new RestBody<>();
         restBody.setCode(httpStatus);
         restBody.setData(data);
-        restBody.setMsg(msg);
-        restBody.setIdentifier(identifier);
-        return restBody;
-    }
-
-    public static Rest<?> failure(String msg, boolean identifier) {
-        Rest<?> restBody = new RestBody<>();
         restBody.setMsg(msg);
         restBody.setIdentifier(identifier);
         return restBody;
@@ -67,21 +60,6 @@ public class RestBody<T> implements Rest<T>, Serializable {
         return restBody;
     }
 
-    public static <T> Rest<T> failureData(T data, String msg, boolean identifier) {
-        Rest<T> restBody = new RestBody<>();
-        restBody.setIdentifier(identifier);
-        restBody.setData(data);
-        restBody.setMsg(msg);
-        return restBody;
-    }
-
-    public static <T> RestBody<T> fallback() {
-        RestBody<T> restBody = new RestBody<>();
-        restBody.setCode(HttpStatus.SERVICE_UNAVAILABLE.value());
-        restBody.setMsg("服务不可用");
-        restBody.setIdentifier(false);
-        return restBody;
-    }
 
     @Override
     public String toString() {

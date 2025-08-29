@@ -3,6 +3,7 @@ package top.wei.oauth2.model.vo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -100,6 +101,7 @@ public class UserInfoVo implements Serializable {
     /**
      * authorities.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> authorities;
 
     /**

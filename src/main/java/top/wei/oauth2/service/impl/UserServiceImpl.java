@@ -1,7 +1,13 @@
 package top.wei.oauth2.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.wei.oauth2.mapper.PermissionMapper;
 import top.wei.oauth2.mapper.UserMapper;
@@ -30,9 +36,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User user) {
-        // 检查用户名是否已存在
-        userMapper.insert(user);
+    public Integer createUser(User user) {
+        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            user.setPassword(delegatingPasswordEncoder.encode(user.getPassword()));
+        }
+        return userMapper.insert(user);
     }
 
     @Override
@@ -57,5 +66,25 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUserInfoByUserName(username);
     }
 
+    @Override
+    public PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserInfoVo> userInfoVos = userMapper.selectAllUserInfo();
+        PageInfo<UserInfoVo> pageInfo = new PageInfo<>(userInfoVos);
+        return pageInfo;
+    }
 
+    @Override
+    public Integer updateUser(User user) {
+        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            user.setPassword(delegatingPasswordEncoder.encode(user.getPassword()));
+        }
+        return userMapper.updateById(user);
+    }
+
+    @Override
+    public Integer deleteUser(Long id) {
+        return userMapper.update(new UpdateWrapper<User>().eq("id", id).set("deleted", 1));
+    }
 }

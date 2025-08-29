@@ -1,5 +1,6 @@
 package top.wei.oauth2.service;
 
+import com.github.pagehelper.PageInfo;
 import top.wei.oauth2.model.dto.PermissionDto;
 import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
@@ -25,8 +26,9 @@ public interface UserService {
      * createUser.
      *
      * @param user User
+     * @return rows
      */
-    void createUser(User user);
+    Integer createUser(User user);
 
     /**
      * getUserById.
@@ -61,4 +63,29 @@ public interface UserService {
      * @return UserInfoVo
      */
     UserInfoVo getUserInfo(String username);
+
+    /**
+     * 查询所有用户信息.
+     *
+     * @param pageNum  pageNum
+     * @param pageSize pageSize
+     * @return List UserInfoVo
+     */
+    PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize);
+
+    /**
+     * 更新用户.
+     *
+     * @param user user
+     * @return rows
+     */
+    Integer updateUser(User user);
+
+    /**
+     * 删除用户.
+     *
+     * @param id id
+     * @return rows
+     */
+    Integer deleteUser(Long id);
 }

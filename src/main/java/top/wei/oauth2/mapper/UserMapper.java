@@ -6,9 +6,10 @@ import top.wei.oauth2.model.dto.UserLoginDto;
 import top.wei.oauth2.model.entity.User;
 import top.wei.oauth2.model.vo.UserInfoVo;
 
+import java.util.List;
+
 
 public interface UserMapper extends BaseMapper<User> {
-
 
     /**
      * 通过用户查询所有角色.
@@ -33,6 +34,14 @@ public interface UserMapper extends BaseMapper<User> {
      * @return UserInfoVo
      */
     UserInfoVo selectUserInfoByUserName(@Param("username") String username);
+
+
+    /**
+     * 查询所有用户信息.
+     *
+     * @return List UserInfoVo
+     */
+    List<UserInfoVo> selectAllUserInfo();
 
 
 }
