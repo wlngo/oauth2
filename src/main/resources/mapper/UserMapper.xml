@@ -83,6 +83,14 @@
         FROM t_user u
         <where>
             u.deleted = 0
+            <if test="keyword != null and keyword != ''">
+                AND (
+                u.username LIKE CONCAT(#{keyword}, '%')
+                OR u.nick_name LIKE CONCAT(#{keyword}, '%')
+                OR u.email LIKE CONCAT(#{keyword}, '%')
+                OR u.phone_number LIKE CONCAT(#{keyword}, '%')
+                )
+            </if>
         </where>
     </select>
 </mapper>

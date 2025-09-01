@@ -69,9 +69,10 @@ public interface UserService {
      *
      * @param pageNum  pageNum
      * @param pageSize pageSize
+     * @param keyword  keyword
      * @return List UserInfoVo
      */
-    PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize);
+    PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword);
 
     /**
      * 更新用户.
@@ -87,5 +88,5 @@ public interface UserService {
      * @param id id
      * @return rows
      */
-    Integer deleteUser(Long id);
+    Integer deleteUser(String id);
 }
