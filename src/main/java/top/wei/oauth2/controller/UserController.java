@@ -37,7 +37,7 @@ public class UserController {
      * @return users
      */
     @PostMapping("/getAllUsers")
-    public Rest<PageInfo<UserInfoVo>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+    public Rest<PageInfo<UserInfoVo>> getAllUsers(@RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(defaultValue = "10") int size) {
         return RestBody.okData(userService.selectAllUserInfo(page, size));
     }
