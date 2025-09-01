@@ -85,6 +85,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer deleteUser(String id) {
-        return userMapper.update(new UpdateWrapper<User>().eq("id", id).set("deleted", 1));
+        return userMapper.update(new UpdateWrapper<User>().eq("user_id", id).set("deleted", 1));
     }
 }
