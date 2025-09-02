@@ -65,7 +65,7 @@
             AND u.deleted = 0
         </where>
     </select>
-    <select id="selectAllUserInfo" resultType="top.wei.oauth2.model.vo.UserInfoVo">
+    <select id="selectAllUserInfo" resultType="top.wei.oauth2.model.entity.User">
         SELECT
         u.user_id,
         u.username,

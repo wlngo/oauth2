@@ -67,10 +67,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword) {
+    public PageInfo<User> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserInfoVo> userInfoVos = userMapper.selectAllUserInfo(keyword);
-        PageInfo<UserInfoVo> pageInfo = new PageInfo<>(userInfoVos);
+        List<User> users = userMapper.selectAllUserInfo(keyword);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
         return pageInfo;
     }
 

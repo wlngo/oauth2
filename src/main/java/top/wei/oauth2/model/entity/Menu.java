@@ -3,6 +3,7 @@ package top.wei.oauth2.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -105,5 +106,6 @@ public class Menu implements Serializable {
      * 删除状态（1 是，0 否）默认否.
      */
     @TableField("deleted")
+    @JsonIgnore
     private Boolean deleted;
 }
