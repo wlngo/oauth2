@@ -67,9 +67,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize) {
+    public PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserInfoVo> userInfoVos = userMapper.selectAllUserInfo();
+        List<UserInfoVo> userInfoVos = userMapper.selectAllUserInfo(keyword);
         PageInfo<UserInfoVo> pageInfo = new PageInfo<>(userInfoVos);
         return pageInfo;
     }
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer deleteUser(Long id) {
-        return userMapper.update(new UpdateWrapper<User>().eq("id", id).set("deleted", 1));
+    public Integer deleteUser(String id) {
+        return userMapper.update(new UpdateWrapper<User>().eq("user_id", id).set("deleted", 1));
     }
 }

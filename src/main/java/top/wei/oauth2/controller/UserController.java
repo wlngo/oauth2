@@ -34,12 +34,14 @@ public class UserController {
      *
      * @param page page
      * @param size size
+     * @param keyword  keyword
      * @return users
      */
     @PostMapping("/getAllUsers")
     public Rest<PageInfo<UserInfoVo>> getAllUsers(@RequestParam(defaultValue = "1") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
-        return RestBody.okData(userService.selectAllUserInfo(page, size));
+                                                  @RequestParam(defaultValue = "10") int size,
+                                                  @RequestParam(required = false) String keyword) {
+        return RestBody.okData(userService.selectAllUserInfo(page, size, keyword));
     }
 
     /**
@@ -82,7 +84,7 @@ public class UserController {
      * @return rows
      */
     @DeleteMapping("/deleteUser/{id}")
-    public Rest<Integer> deleteUser(@PathVariable Long id) {
+    public Rest<Integer> deleteUser(@PathVariable String id) {
         return RestBody.okData(userService.deleteUser(id));
     }
 }

@@ -39,9 +39,10 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 查询所有用户信息.
      *
+     * @param keyword keyword
      * @return List UserInfoVo
      */
-    List<UserInfoVo> selectAllUserInfo();
+    List<UserInfoVo> selectAllUserInfo(@Param("keyword") String keyword);
 
 
 }
