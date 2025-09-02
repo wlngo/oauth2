@@ -23,7 +23,6 @@ import top.wei.oauth2.utils.RestBody;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('ROLE_ROLE_USERMANAGER')")
 public class UserController {
 
     private final UserService userService;

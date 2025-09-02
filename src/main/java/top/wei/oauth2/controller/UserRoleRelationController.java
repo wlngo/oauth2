@@ -25,7 +25,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user-role-relations")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('ROLE_ROLE_USERMANAGER')")
 public class UserRoleRelationController {
 
     private final UserRoleRelationService userRoleRelationService;

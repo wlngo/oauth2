@@ -2,6 +2,7 @@ package top.wei.oauth2.controller;
 
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class RoleController {
      * @return roles
      */
     @PostMapping("/getAllRoles")
+    @PreAuthorize("hasAuthority('user-role:view')")
     public Rest<PageInfo<Role>> getAllRoles(@RequestParam(defaultValue = "1") int page,
                                             @RequestParam(defaultValue = "10") int size,
                                             @RequestParam(required = false) String keyword) {
@@ -47,6 +49,7 @@ public class RoleController {
      * @return role
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('user-role:view')")
     public Rest<Role> getRoleById(@PathVariable String id) {
         return RestBody.okData(roleService.getRoleById(id));
     }
@@ -58,6 +61,7 @@ public class RoleController {
      * @return rows
      */
     @PostMapping("/createRole")
+    @PreAuthorize("hasAuthority('role:create')")
     public Rest<Integer> createRole(@RequestBody Role role) {
         return RestBody.okData(roleService.createRole(role));
     }
@@ -69,6 +73,7 @@ public class RoleController {
      * @return rows
      */
     @PostMapping("/updateRole")
+    @PreAuthorize("hasAuthority('role:update')")
     public Rest<Integer> updateRole(@RequestBody Role role) {
         return RestBody.okData(roleService.updateRole(role));
     }
@@ -80,6 +85,7 @@ public class RoleController {
      * @return rows
      */
     @DeleteMapping("/deleteRole/{id}")
+    @PreAuthorize("hasAuthority('role:delete')")
     public Rest<Integer> deleteRole(@PathVariable String id) {
         return RestBody.okData(roleService.deleteRole(id));
     }

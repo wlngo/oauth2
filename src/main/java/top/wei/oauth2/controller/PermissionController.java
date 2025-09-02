@@ -2,6 +2,7 @@ package top.wei.oauth2.controller;
 
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class PermissionController {
      * @return permissions
      */
     @PostMapping("/getAllPermissions")
+    @PreAuthorize("hasAuthority('permission:view')")
     public Rest<PageInfo<Permission>> getAllPermissions(@RequestParam(defaultValue = "1") int page,
                                                          @RequestParam(defaultValue = "10") int size,
                                                          @RequestParam(required = false) String keyword) {
@@ -47,6 +49,7 @@ public class PermissionController {
      * @return permission
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('permission:view')")
     public Rest<Permission> getPermissionById(@PathVariable Integer id) {
         return RestBody.okData(permissionService.getPermissionById(id));
     }
@@ -58,6 +61,7 @@ public class PermissionController {
      * @return rows
      */
     @PostMapping("/createPermission")
+    @PreAuthorize("hasAuthority('permission:create')")
     public Rest<Integer> createPermission(@RequestBody Permission permission) {
         return RestBody.okData(permissionService.createPermission(permission));
     }
@@ -69,6 +73,7 @@ public class PermissionController {
      * @return rows
      */
     @PostMapping("/updatePermission")
+    @PreAuthorize("hasAuthority('permission:update')")
     public Rest<Integer> updatePermission(@RequestBody Permission permission) {
         return RestBody.okData(permissionService.updatePermission(permission));
     }
@@ -80,6 +85,7 @@ public class PermissionController {
      * @return rows
      */
     @DeleteMapping("/deletePermission/{id}")
+    @PreAuthorize("hasAuthority('permission:delete')")
     public Rest<Integer> deletePermission(@PathVariable Integer id) {
         return RestBody.okData(permissionService.deletePermission(id));
     }
