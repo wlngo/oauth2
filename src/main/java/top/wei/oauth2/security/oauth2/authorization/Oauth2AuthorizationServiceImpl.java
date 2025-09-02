@@ -101,7 +101,7 @@ public class Oauth2AuthorizationServiceImpl implements OAuth2AuthorizationServic
 
     public OAuth2Authorization findBy(List<Oauth2Authorization> oauth2AuthorizationList) {
 
-        Oauth2Authorization oauth2Authorization = !oauth2AuthorizationList.isEmpty() ? oauth2AuthorizationList.getFirst() : null;
+        Oauth2Authorization oauth2Authorization = !oauth2AuthorizationList.isEmpty() ? oauth2AuthorizationList.get(0) : null;
         OAuth2Authorization result = null;
         if (oauth2Authorization != null) {
             String registeredClientId = oauth2Authorization.getRegisteredClientId();
