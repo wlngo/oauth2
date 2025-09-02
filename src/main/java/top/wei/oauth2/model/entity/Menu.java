@@ -12,33 +12,65 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * 菜单表.
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("t_role")
-public class Role implements Serializable {
+@TableName("t_menu")
+public class Menu implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色ID.
+     * 菜单ID.
      */
-    @TableId("role_id")
-    private String roleId;
+    @TableId("menu_id")
+    private String menuId;
 
     /**
-     * 角色名称.
+     * 菜单名称.
      */
-    @TableField("role_name")
-    private String roleName;
+    @TableField("menu_name")
+    private String menuName;
 
     /**
-     * 展示名称.
+     * 菜单路径.
      */
-    @TableField("role_content")
-    private String roleContent;
+    @TableField("menu_path")
+    private String menuPath;
+
+    /**
+     * 菜单图标.
+     */
+    @TableField("menu_icon")
+    private String menuIcon;
+
+    /**
+     * 父菜单ID.
+     */
+    @TableField("parent_id")
+    private String parentId;
+
+    /**
+     * 排序.
+     */
+    @TableField("sort_order")
+    private Integer sortOrder;
+
+    /**
+     * 菜单类型（0目录 1菜单 2按钮）.
+     */
+    @TableField("menu_type")
+    private Integer menuType;
+
+    /**
+     * 菜单状态（0隐藏 1显示）.
+     */
+    @TableField("visible")
+    private Boolean visible;
 
     /**
      * 描述.

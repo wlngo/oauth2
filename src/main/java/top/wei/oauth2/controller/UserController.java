@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.wei.oauth2.model.entity.User;
-import top.wei.oauth2.model.vo.UserInfoVo;
 import top.wei.oauth2.service.UserService;
 import top.wei.oauth2.utils.Rest;
 import top.wei.oauth2.utils.RestBody;
@@ -39,7 +38,7 @@ public class UserController {
      */
     @PostMapping("/getAllUsers")
     @PreAuthorize("hasAuthority('user:view')")
-    public Rest<PageInfo<UserInfoVo>> getAllUsers(@RequestParam(defaultValue = "1") int page,
+    public Rest<PageInfo<User>> getAllUsers(@RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(defaultValue = "10") int size,
                                                   @RequestParam(required = false) String keyword) {
         return RestBody.okData(userService.selectAllUserInfo(page, size, keyword));
@@ -53,8 +52,8 @@ public class UserController {
      */
     @GetMapping("/findByUsername/{username}")
     @PreAuthorize("hasAuthority('user:view')")
-    public Rest<UserInfoVo> findByUsername(@PathVariable String username) {
-        return RestBody.okData(userService.getUserInfo(username));
+    public Rest<User> findByUsername(@PathVariable String username) {
+        return RestBody.okData(userService.getUserByUsername(username));
     }
 
     /**

@@ -42,7 +42,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param keyword keyword
      * @return List UserInfoVo
      */
-    List<UserInfoVo> selectAllUserInfo(@Param("keyword") String keyword);
+    List<User> selectAllUserInfo(@Param("keyword") String keyword);
 
 
 }

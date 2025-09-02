@@ -72,7 +72,7 @@ public interface UserService {
      * @param keyword  keyword
      * @return List UserInfoVo
      */
-    PageInfo<UserInfoVo> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword);
+    PageInfo<User> selectAllUserInfo(Integer pageNum, Integer pageSize, String keyword);
 
     /**
      * 更新用户.
