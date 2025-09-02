@@ -2,6 +2,7 @@ package top.wei.oauth2.controller;
 
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class MenuController {
      * @return menus
      */
     @PostMapping("/getAllMenus")
+    @PreAuthorize("hasAuthority('menus:view')")
     public Rest<PageInfo<Menu>> getAllMenus(@RequestParam(defaultValue = "1") int page,
                                             @RequestParam(defaultValue = "10") int size,
                                             @RequestParam(required = false) String keyword) {
@@ -47,6 +49,7 @@ public class MenuController {
      * @return menu
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('menus:view')")
     public Rest<Menu> getMenuById(@PathVariable String id) {
         return RestBody.okData(menuService.getMenuById(id));
     }
@@ -58,6 +61,7 @@ public class MenuController {
      * @return rows
      */
     @PostMapping("/createMenu")
+    @PreAuthorize("hasAuthority('menus:create')")
     public Rest<Integer> createMenu(@RequestBody Menu menu) {
         return RestBody.okData(menuService.createMenu(menu));
     }
@@ -69,6 +73,7 @@ public class MenuController {
      * @return rows
      */
     @PostMapping("/updateMenu")
+    @PreAuthorize("hasAuthority('menus:update')")
     public Rest<Integer> updateMenu(@RequestBody Menu menu) {
         return RestBody.okData(menuService.updateMenu(menu));
     }
@@ -80,6 +85,7 @@ public class MenuController {
      * @return rows
      */
     @DeleteMapping("/deleteMenu/{id}")
+    @PreAuthorize("hasAuthority('menus:delete')")
     public Rest<Integer> deleteMenu(@PathVariable String id) {
         return RestBody.okData(menuService.deleteMenu(id));
     }

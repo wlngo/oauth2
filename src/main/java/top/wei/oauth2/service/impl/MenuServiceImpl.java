@@ -13,6 +13,7 @@ import top.wei.oauth2.service.MenuService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * MenuServiceImpl.
@@ -64,4 +65,17 @@ public class MenuServiceImpl implements MenuService {
         updateWrapper.set("updated_at", new Date());
         return menuMapper.update(null, updateWrapper);
     }
+
+    @Override
+    public TreeMap<Long, Menu> getAllMenuTree(String userId) {
+        List<Menu> menus = menuMapper.searchAllByUserId(userId);
+        // 按 parentId 分组
+        TreeMap<Long, Menu> treeMap = new TreeMap<>();
+        for (Menu menu : menus) {
+            treeMap.put(menu.getParentId() != null ? Long.parseLong(menu.getParentId()) : 0L, menu);
+        }
+        // 构建树
+        return treeMap;
+    }
+
 }

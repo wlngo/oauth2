@@ -3,6 +3,8 @@ package top.wei.oauth2.service;
 import com.github.pagehelper.PageInfo;
 import top.wei.oauth2.model.entity.Menu;
 
+import java.util.TreeMap;
+
 /**
  * MenuService.
  */
@@ -49,4 +51,13 @@ public interface MenuService {
      * @return rows
      */
     Integer deleteMenu(String menuId);
+
+
+    /**
+     * 获取所有菜单树形结构.
+     *
+     * @param userId userId
+     * @return menu tree
+     */
+    TreeMap<Long, Menu> getAllMenuTree(String userId);
 }

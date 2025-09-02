@@ -2,6 +2,7 @@ package top.wei.oauth2.controller;
 
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class RoleMenuRelationController {
      * @return relations
      */
     @PostMapping("/getAllRoleMenuRelations")
+    @PreAuthorize("hasAuthority('role-menu:view')")
     public Rest<PageInfo<RoleMenuRelation>> getAllRoleMenuRelations(@RequestParam(defaultValue = "1") int page,
                                                                      @RequestParam(defaultValue = "10") int size,
                                                                      @RequestParam(required = false) String roleId) {
@@ -47,6 +49,7 @@ public class RoleMenuRelationController {
      * @return relation
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('role-menu:view')")
     public Rest<RoleMenuRelation> getRoleMenuRelationById(@PathVariable String id) {
         return RestBody.okData(roleMenuRelationService.getRoleMenuRelationById(id));
     }
@@ -58,6 +61,7 @@ public class RoleMenuRelationController {
      * @return rows
      */
     @PostMapping("/createRoleMenuRelation")
+    @PreAuthorize("hasAuthority('role-menu:create')")
     public Rest<Integer> createRoleMenuRelation(@RequestBody RoleMenuRelation roleMenuRelation) {
         return RestBody.okData(roleMenuRelationService.createRoleMenuRelation(roleMenuRelation));
     }
@@ -69,6 +73,7 @@ public class RoleMenuRelationController {
      * @return rows
      */
     @PostMapping("/updateRoleMenuRelation")
+    @PreAuthorize("hasAuthority('role-menu:update')")
     public Rest<Integer> updateRoleMenuRelation(@RequestBody RoleMenuRelation roleMenuRelation) {
         return RestBody.okData(roleMenuRelationService.updateRoleMenuRelation(roleMenuRelation));
     }
@@ -80,6 +85,7 @@ public class RoleMenuRelationController {
      * @return rows
      */
     @DeleteMapping("/deleteRoleMenuRelation/{id}")
+    @PreAuthorize("hasAuthority('role-menu:delete')")
     public Rest<Integer> deleteRoleMenuRelation(@PathVariable String id) {
         return RestBody.okData(roleMenuRelationService.deleteRoleMenuRelation(id));
     }
