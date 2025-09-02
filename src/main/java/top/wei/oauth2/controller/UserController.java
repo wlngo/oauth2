@@ -24,7 +24,7 @@ import top.wei.oauth2.utils.RestBody;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@PreAuthorize("hasAuthority('ROLE_ROLE_USERMANAGER')")
 public class UserController {
 
     private final UserService userService;
@@ -38,6 +38,7 @@ public class UserController {
      * @return users
      */
     @PostMapping("/getAllUsers")
+    @PreAuthorize("hasAuthority('user:view')")
     public Rest<PageInfo<UserInfoVo>> getAllUsers(@RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(defaultValue = "10") int size,
                                                   @RequestParam(required = false) String keyword) {
@@ -51,6 +52,7 @@ public class UserController {
      * @return UserInfoVo.
      */
     @GetMapping("/findByUsername/{username}")
+    @PreAuthorize("hasAuthority('user:view')")
     public Rest<UserInfoVo> findByUsername(@PathVariable String username) {
         return RestBody.okData(userService.getUserInfo(username));
     }
@@ -62,6 +64,7 @@ public class UserController {
      * @return rows
      */
     @PostMapping("/createUser")
+    @PreAuthorize("hasAuthority('user:create')")
     public Rest<Integer> createUser(@RequestBody User user) {
         return RestBody.okData(userService.createUser(user));
     }
@@ -73,6 +76,7 @@ public class UserController {
      * @return rows
      */
     @PostMapping("/updateUser")
+    @PreAuthorize("hasAuthority('user:update')")
     public Rest<Integer> updateUser(@RequestBody User user) {
         return RestBody.okData(userService.updateUser(user));
     }
@@ -84,6 +88,7 @@ public class UserController {
      * @return rows
      */
     @DeleteMapping("/deleteUser/{id}")
+    @PreAuthorize("hasAuthority('user:delete')")
     public Rest<Integer> deleteUser(@PathVariable String id) {
         return RestBody.okData(userService.deleteUser(id));
     }
