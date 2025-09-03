@@ -3,7 +3,7 @@ package top.wei.oauth2.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -37,7 +37,7 @@ public class User implements Serializable {
      * 用户密码，建议加密存储（如 bcrypt）.
      */
     @TableField("password")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     /**
@@ -122,7 +122,7 @@ public class User implements Serializable {
      * 是否逻辑删除，1 表示已删除，0 表示未删除.
      */
     @TableField("deleted")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Boolean deleted;
 
     /**
