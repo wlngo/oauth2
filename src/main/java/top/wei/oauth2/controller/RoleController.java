@@ -35,7 +35,7 @@ public class RoleController {
      * @return roles
      */
     @PostMapping("/getAllRoles")
-    @PreAuthorize("hasAuthority('user-role:view')")
+    @PreAuthorize("hasAuthority('role:view')")
     public Rest<PageInfo<Role>> getAllRoles(@RequestParam(defaultValue = "1") int page,
                                             @RequestParam(defaultValue = "10") int size,
                                             @RequestParam(required = false) String keyword) {
@@ -49,7 +49,7 @@ public class RoleController {
      * @return role
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('user-role:view')")
+    @PreAuthorize("hasAuthority('role:view')")
     public Rest<Role> getRoleById(@PathVariable String id) {
         return RestBody.okData(roleService.getRoleById(id));
     }
