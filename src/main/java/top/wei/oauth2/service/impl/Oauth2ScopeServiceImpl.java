@@ -49,7 +49,7 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
 
         List<String> scopeList = Arrays.stream(StringUtils.delimitedListToStringArray(scope, " ")).toList();
         if (scopeList.isEmpty()) {
-           throw new IllegalArgumentException("scope must not be empty");
+            throw new IllegalArgumentException("scope must not be empty");
         }
         List<Oauth2Scope> oAuth2Scopes = oauth2ScopeMapper.findByClientIdAndScope(id, scopeList);
         Set<Oauth2Scope> scopesToApproves = new HashSet<>();
