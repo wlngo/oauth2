@@ -9,15 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.wei.oauth2.model.entity.Menu;
-import top.wei.oauth2.model.entity.User;
 import top.wei.oauth2.model.vo.CurrentUserVo;
 import top.wei.oauth2.model.vo.UserInfoVo;
-import top.wei.oauth2.service.MenuService;
 import top.wei.oauth2.service.UserService;
 
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * AuthController.
@@ -28,8 +24,6 @@ import java.util.TreeMap;
 public class AuthController {
 
     private final UserService userService;
-
-    private final MenuService menuService;
 
     /**
      * 获取当前用户信息.
@@ -70,15 +64,4 @@ public class AuthController {
         return ResponseEntity.ok(userInfo);
     }
 
-    /**
-     * 获取当前用户菜单树形结构.
-     *
-     * @param authentication the authentication
-     * @return ResponseEntity with menu tree
-     */
-    @PostMapping
-    private ResponseEntity<TreeMap<Long, Menu>> getMenus(Authentication authentication) {
-        User userByUsername = userService.getUserByUsername(authentication.getName());
-        return ResponseEntity.ok(menuService.getAllMenuTree(userByUsername.getUserId()));
-    }
 }
