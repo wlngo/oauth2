@@ -206,39 +206,6 @@ CREATE TABLE IF NOT EXISTS `t_user_role_relation`  (
     INDEX `role_id`(`role_id` ASC) USING BTREE COMMENT 'role_id索引'
     ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户角色关系表' ROW_FORMAT = COMPACT;
 
--- ----------------------------
--- Table structure for t_menu
--- ----------------------------
-CREATE TABLE IF NOT EXISTS `t_menu` (
-                                        `menu_id` VARCHAR(64) NOT NULL COMMENT '菜单ID',
-    `menu_name` VARCHAR(128) NOT NULL COMMENT '菜单名称',
-    `menu_path` VARCHAR(256) DEFAULT NULL COMMENT '菜单路径',
-    `menu_icon` VARCHAR(128) DEFAULT NULL COMMENT '菜单图标',
-    `parent_id` VARCHAR(64) DEFAULT NULL COMMENT '父菜单ID',
-    `sort_order` INT DEFAULT 0 COMMENT '排序',
-    `menu_type` INT DEFAULT 1 COMMENT '菜单类型（0目录 1菜单 2按钮）',
-    `visible` TINYINT(1) DEFAULT 1 COMMENT '菜单状态（0隐藏 1显示）',
-    `description` VARCHAR(512) DEFAULT NULL COMMENT '描述',
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `create_id` VARCHAR(64) DEFAULT NULL COMMENT '创建人ID',
-    `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `update_id` VARCHAR(64) DEFAULT NULL COMMENT '修改人ID',
-    `deleted` TINYINT(1) DEFAULT 0 COMMENT '删除状态（1 是，0 否）默认否',
-    PRIMARY KEY (`menu_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
-
--- ----------------------------
--- Table structure for t_role_menu_relation
--- ----------------------------
-
-CREATE TABLE IF NOT EXISTS `t_role_menu_relation` (
-                                                      `id` VARCHAR(64) NOT NULL COMMENT '主键id',
-    `role_id` VARCHAR(64) NOT NULL COMMENT '角色id',
-    `menu_id` VARCHAR(64) NOT NULL COMMENT '菜单id',
-    PRIMARY KEY (`id`),
-    KEY `idx_role_id` (`role_id`),
-    KEY `idx_menu_id` (`menu_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单关系表';
 
 
 

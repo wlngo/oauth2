@@ -11,8 +11,9 @@ spring:
       password: root
   sql:
     init:
-      schema-locations: classpath:sql/ddl.sql
       mode: always
+      schema-locations: classpath:sql/ddl.sql
+      data-locations: classpath:sql/dml.sql
   session:
     redis:
       flush-mode: on_save
