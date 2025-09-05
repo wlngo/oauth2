@@ -58,7 +58,7 @@ VALUES ('1', 'ADMIN', '系统管理员', '全局最高权限', NOW(), NULL, NOW(
 
 -- 用户表（主键 user_id）
 INSERT INTO t_user (user_id, username, password, nick_name, real_name, email, email_verified, phone_number, phone_number_verified, gender, birthdate, avatar_url, account_expired, account_locked, credentials_expired, disabled, deleted, secret, created_at, updated_at)
-VALUES ('1', 'admin', '{bcrypt}$2a$10$0niOidYiYuyOrOt6PKrjkOyMg4tWn4cTHkjrOniHzzcyDZn4uYihG', 'admin', 'admin', 'admin@admin.com', 0, '18000000000', 0, 1, NULL, NULL, 0, 0, 0, 0, 0, NULL, '2025-09-05 15:53:00', '2025-09-05 15:53:44')
+VALUES ('1', 'admin', '{bcrypt}$2a$10$7FhmqQTZq3siuhslJkKKPuUYA1fGfYsyq2xohqi3X7d5iaaHqR9xG', 'admin', 'admin', 'admin@admin.com', 0, '18000000000', 0, 1, NULL, NULL, 0, 0, 0, 0, 0, NULL, '2025-09-05 15:53:00', '2025-09-05 15:53:44')
     ON DUPLICATE KEY UPDATE user_id = user_id;
 
 -- 用户角色关系表（主键 id）
