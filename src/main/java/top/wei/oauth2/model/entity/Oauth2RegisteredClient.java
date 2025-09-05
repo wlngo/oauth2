@@ -3,6 +3,7 @@ package top.wei.oauth2.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,6 +32,7 @@ public class Oauth2RegisteredClient implements Serializable {
     private Instant clientIdIssuedAt;
 
     @TableField("client_secret")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String clientSecret;
 
     @TableField("client_secret_expires_at")

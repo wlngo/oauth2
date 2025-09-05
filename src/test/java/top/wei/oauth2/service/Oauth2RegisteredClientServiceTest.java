@@ -1,4 +1,4 @@
-package top.wei.oauth2;
+package top.wei.oauth2.service;
 
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import top.wei.oauth2.model.entity.Oauth2RegisteredClient;
-import top.wei.oauth2.service.Oauth2RegisteredClientService;
 
 import java.time.Instant;
 import java.util.UUID;

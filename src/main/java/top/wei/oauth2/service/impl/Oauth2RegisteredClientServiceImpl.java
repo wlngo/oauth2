@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import top.wei.oauth2.mapper.Oauth2RegisteredClientMapper;
@@ -33,6 +34,7 @@ public class Oauth2RegisteredClientServiceImpl implements Oauth2RegisteredClient
         if (oauth2RegisteredClient.getClientIdIssuedAt() == null) {
             oauth2RegisteredClient.setClientIdIssuedAt(Instant.now());
         }
+        oauth2RegisteredClient.setClientSecret("{bcrypt}" + new BCryptPasswordEncoder().encode(oauth2RegisteredClient.getClientSecret()));
         return oauth2RegisteredClientMapper.insert(oauth2RegisteredClient);
     }
 
@@ -67,6 +69,8 @@ public class Oauth2RegisteredClientServiceImpl implements Oauth2RegisteredClient
 
     @Override
     public Integer updateOauth2RegisteredClient(Oauth2RegisteredClient oauth2RegisteredClient) {
+        // Prevent updating client secret here
+        oauth2RegisteredClient.setClientSecret(null);
         return oauth2RegisteredClientMapper.updateById(oauth2RegisteredClient);
     }
 
