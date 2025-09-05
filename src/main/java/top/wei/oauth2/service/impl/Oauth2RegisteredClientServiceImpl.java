@@ -34,7 +34,13 @@ public class Oauth2RegisteredClientServiceImpl implements Oauth2RegisteredClient
         if (oauth2RegisteredClient.getClientIdIssuedAt() == null) {
             oauth2RegisteredClient.setClientIdIssuedAt(Instant.now());
         }
-        oauth2RegisteredClient.setClientSecret("{bcrypt}" + new BCryptPasswordEncoder().encode(oauth2RegisteredClient.getClientSecret()));
+        
+        // Only encode client secret if it's not already encoded
+        String clientSecret = oauth2RegisteredClient.getClientSecret();
+        if (clientSecret != null && !isAlreadyEncoded(clientSecret)) {
+            oauth2RegisteredClient.setClientSecret("{bcrypt}" + new BCryptPasswordEncoder().encode(clientSecret));
+        }
+        
         return oauth2RegisteredClientMapper.insert(oauth2RegisteredClient);
     }
 
@@ -69,9 +75,35 @@ public class Oauth2RegisteredClientServiceImpl implements Oauth2RegisteredClient
 
     @Override
     public Integer updateOauth2RegisteredClient(Oauth2RegisteredClient oauth2RegisteredClient) {
-        // Prevent updating client secret here
-        oauth2RegisteredClient.setClientSecret(null);
+        // Handle client secret encoding if provided
+        String clientSecret = oauth2RegisteredClient.getClientSecret();
+        if (clientSecret != null && !isAlreadyEncoded(clientSecret)) {
+            oauth2RegisteredClient.setClientSecret("{bcrypt}" + new BCryptPasswordEncoder().encode(clientSecret));
+        }
         return oauth2RegisteredClientMapper.updateById(oauth2RegisteredClient);
+    }
+
+    /**
+     * Check if client secret is already encoded with a password encoder prefix.
+     *
+     * @param clientSecret the client secret to check
+     * @return true if already encoded, false otherwise
+     */
+    private boolean isAlreadyEncoded(String clientSecret) {
+        if (clientSecret == null) {
+            return false;
+        }
+        return clientSecret.startsWith("{noop}")
+                || clientSecret.startsWith("{bcrypt}")
+                || clientSecret.startsWith("{pbkdf2}")
+                || clientSecret.startsWith("{scrypt}")
+                || clientSecret.startsWith("{argon2}")
+                || clientSecret.startsWith("{ldap}")
+                || clientSecret.startsWith("{MD4}")
+                || clientSecret.startsWith("{MD5}")
+                || clientSecret.startsWith("{SHA}")
+                || clientSecret.startsWith("{SHA-1}")
+                || clientSecret.startsWith("{SHA-256}");
     }
 
     @Override

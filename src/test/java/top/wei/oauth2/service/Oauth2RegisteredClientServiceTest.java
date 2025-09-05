@@ -146,6 +146,37 @@ public class Oauth2RegisteredClientServiceTest {
         assertNull(deletedClient);
     }
 
+    @Test
+    public void testClientSecretEncodingHandling() {
+        // Test with pre-encoded {noop} secret
+        Oauth2RegisteredClient clientWithNoop = createTestClient();
+        clientWithNoop.setClientId("test-noop-" + System.currentTimeMillis());
+        clientWithNoop.setClientSecret("{noop}plaintext-secret");
+        
+        oauth2RegisteredClientService.createOauth2RegisteredClient(clientWithNoop);
+        
+        Oauth2RegisteredClient foundNoopClient = oauth2RegisteredClientService.getOauth2RegisteredClientById(clientWithNoop.getId());
+        assertEquals("{noop}plaintext-secret", foundNoopClient.getClientSecret());
+
+        // Test with plain text secret (should be bcrypt encoded)
+        Oauth2RegisteredClient clientPlainText = createTestClient();
+        clientPlainText.setClientId("test-plain-" + System.currentTimeMillis());
+        clientPlainText.setClientSecret("plaintext-secret");
+        
+        oauth2RegisteredClientService.createOauth2RegisteredClient(clientPlainText);
+        
+        Oauth2RegisteredClient foundPlainClient = oauth2RegisteredClientService.getOauth2RegisteredClientById(clientPlainText.getId());
+        assertTrue(foundPlainClient.getClientSecret().startsWith("{bcrypt}"));
+
+        // Test updating with pre-encoded secret
+        foundNoopClient.setClientName("Updated Client");
+        foundNoopClient.setClientSecret("{noop}updated-secret");
+        oauth2RegisteredClientService.updateOauth2RegisteredClient(foundNoopClient);
+        
+        Oauth2RegisteredClient updatedClient = oauth2RegisteredClientService.getOauth2RegisteredClientById(foundNoopClient.getId());
+        assertEquals("{noop}updated-secret", updatedClient.getClientSecret());
+    }
+
     private Oauth2RegisteredClient createTestClient() {
         return new Oauth2RegisteredClient()
                 .setId(UUID.randomUUID().toString())

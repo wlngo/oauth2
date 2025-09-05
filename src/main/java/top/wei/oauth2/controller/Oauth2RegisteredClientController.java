@@ -20,7 +20,7 @@ import top.wei.oauth2.utils.RestBody;
  * Oauth2RegisteredClientController.
  */
 @RestController
-@RequestMapping("/api/oauth2-clients")
+@RequestMapping("/oauth2-service/api/oauth2-clients")
 @RequiredArgsConstructor
 public class Oauth2RegisteredClientController {
 
