@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.wei.oauth2.mapper.UserRoleRelationMapper">
 
+    <select id="queryRolesByUserId" resultType="top.wei.oauth2.model.entity.Role">
+        SELECT r.*
+        FROM t_user_role_relation urr
+                 JOIN t_role r ON urr.role_id = r.role_id
+        WHERE urr.user_id = #{userId}
+          AND r.deleted = 0;
+    </select>
+    <select id="queryRolesNotAssignedToUser" resultType="top.wei.oauth2.model.entity.Role">
+
+        SELECT r.*
+        FROM t_role r
+                 LEFT JOIN t_user_role_relation urr
+                           ON r.role_id = urr.role_id AND urr.user_id = #{userId}
+        WHERE r.deleted = 0
+          AND urr.role_id IS NULL;
+    </select>
 </mapper>

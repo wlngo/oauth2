@@ -1,12 +1,10 @@
 package top.wei.oauth2.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import top.wei.oauth2.mapper.RolePermissionRelationMapper;
+import top.wei.oauth2.model.entity.Permission;
 import top.wei.oauth2.model.entity.RolePermissionRelation;
 import top.wei.oauth2.service.RolePermissionRelationService;
 
@@ -26,49 +24,23 @@ public class RolePermissionRelationServiceImpl implements RolePermissionRelation
         return rolePermissionRelationMapper.insert(rolePermissionRelation);
     }
 
+
     @Override
-    public RolePermissionRelation getRolePermissionRelationById(String id) {
-        return rolePermissionRelationMapper.selectById(id);
+    public List<Permission> queryPermissionByRoleId(String roleId) {
+        return rolePermissionRelationMapper.queryPermissionByRoleId(roleId);
     }
 
     @Override
-    public List<RolePermissionRelation> getRolePermissionRelationsByRoleId(String roleId) {
-        return rolePermissionRelationMapper.selectList(
-                new QueryWrapper<RolePermissionRelation>().eq("role_id", roleId)
+    public List<Permission> queryPermissionNotAssignedToRoleId(String roleId) {
+        return rolePermissionRelationMapper.queryPermissionNotAssignedToRoleId(roleId);
+    }
+
+    @Override
+    public Integer deleteRolePermissionRelation(String roleId) {
+        return rolePermissionRelationMapper.delete(
+                new QueryWrapper<RolePermissionRelation>()
+                        .eq("role_id", roleId)
         );
-    }
-
-    @Override
-    public List<RolePermissionRelation> getRolePermissionRelationsByPermissionId(String permissionId) {
-        return rolePermissionRelationMapper.selectList(
-                new QueryWrapper<RolePermissionRelation>().eq("permission_id", permissionId)
-        );
-    }
-
-    @Override
-    public PageInfo<RolePermissionRelation> selectRolePermissionRelations(Integer pageNum, Integer pageSize, String roleId, String permissionId) {
-        PageHelper.startPage(pageNum, pageSize);
-        
-        QueryWrapper<RolePermissionRelation> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotBlank(roleId)) {
-            queryWrapper.eq("role_id", roleId);
-        }
-        if (StringUtils.isNotBlank(permissionId)) {
-            queryWrapper.eq("permission_id", permissionId);
-        }
-        
-        List<RolePermissionRelation> relations = rolePermissionRelationMapper.selectList(queryWrapper);
-        return new PageInfo<>(relations);
-    }
-
-    @Override
-    public Integer updateRolePermissionRelation(RolePermissionRelation rolePermissionRelation) {
-        return rolePermissionRelationMapper.updateById(rolePermissionRelation);
-    }
-
-    @Override
-    public Integer deleteRolePermissionRelation(String id) {
-        return rolePermissionRelationMapper.deleteById(id);
     }
 
     @Override

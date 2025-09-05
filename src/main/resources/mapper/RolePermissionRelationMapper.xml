@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.wei.oauth2.mapper.RolePermissionRelationMapper">
 
+    <select id="queryPermissionByRoleId" resultType="top.wei.oauth2.model.entity.Permission">
+        SELECT p.*
+        FROM t_role_permission_relation rpr
+                 JOIN t_permission p ON rpr.permission_id = p.permission_id
+        WHERE rpr.role_id = #{roleId}
+          AND p.deleted = 0;
+    </select>
+    <select id="queryPermissionNotAssignedToRoleId" resultType="top.wei.oauth2.model.entity.Permission">
+        SELECT p.*
+        FROM t_permission p
+                 LEFT JOIN t_role_permission_relation rpr
+                           ON p.permission_id = rpr.permission_id AND rpr.role_id = #{roleId}
+        WHERE rpr.permission_id IS NULL
+          AND p.deleted = 0;
+    </select>
 </mapper>
