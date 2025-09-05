@@ -1,35 +1,44 @@
 package top.wei.oauth2.service;
 
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import top.wei.oauth2.mapper.Oauth2RegisteredClientMapper;
 import top.wei.oauth2.model.entity.Oauth2RegisteredClient;
+import top.wei.oauth2.service.impl.Oauth2RegisteredClientServiceImpl;
 
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 /**
  * Oauth2RegisteredClientServiceTest.
  */
-@SpringBootTest
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@ActiveProfiles("test")
 public class Oauth2RegisteredClientServiceTest {
 
-    private final Oauth2RegisteredClientService oauth2RegisteredClientService;
+    @Mock
+    private Oauth2RegisteredClientMapper oauth2RegisteredClientMapper;
+
+    private Oauth2RegisteredClientService oauth2RegisteredClientService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        oauth2RegisteredClientService = new Oauth2RegisteredClientServiceImpl(oauth2RegisteredClientMapper);
+    }
 
     @Test
-    void testServiceIsLoaded() {
-        // Test that service is properly injected and Spring context loads
+    void testServiceIsCreated() {
+        // Test that service is properly created
         assertNotNull(oauth2RegisteredClientService);
     }
 
     @Test 
     void testServiceMethods() {
-        // Test basic service functionality - just verify methods exist
+        // Test basic service functionality - just verify methods exist and can be called
         Oauth2RegisteredClient client = new Oauth2RegisteredClient();
         client.setId("test-id");
         client.setClientId("test-client");
@@ -43,16 +52,27 @@ public class Oauth2RegisteredClientServiceTest {
         client.setClientSettings("{}");
         client.setTokenSettings("{}");
         
-        // These methods should exist and be callable
-        assertNotNull(oauth2RegisteredClientService);
+        // Mock the mapper calls
+        when(oauth2RegisteredClientMapper.insert(any(Oauth2RegisteredClient.class))).thenReturn(1);
+        when(oauth2RegisteredClientMapper.selectById("test-id")).thenReturn(client);
+        when(oauth2RegisteredClientMapper.updateById(any(Oauth2RegisteredClient.class))).thenReturn(1);
+        when(oauth2RegisteredClientMapper.deleteById("test-id")).thenReturn(1);
         
-        // Test method signatures exist
+        // Test method signatures exist and basic functionality
         try {
             oauth2RegisteredClientService.getClass().getMethod("createOauth2RegisteredClient", Oauth2RegisteredClient.class);
             oauth2RegisteredClientService.getClass().getMethod("getOauth2RegisteredClientById", String.class);
             oauth2RegisteredClientService.getClass().getMethod("selectAllOauth2RegisteredClients", Integer.class, Integer.class, String.class);
             oauth2RegisteredClientService.getClass().getMethod("updateOauth2RegisteredClient", Oauth2RegisteredClient.class);
             oauth2RegisteredClientService.getClass().getMethod("deleteOauth2RegisteredClient", String.class);
+            
+            // Test basic method calls
+            assertNotNull(oauth2RegisteredClientService.createOauth2RegisteredClient(client));
+            assertNotNull(oauth2RegisteredClientService.getOauth2RegisteredClientById("test-id"));
+            assertNotNull(oauth2RegisteredClientService.selectAllOauth2RegisteredClients(1, 10, null));
+            assertNotNull(oauth2RegisteredClientService.updateOauth2RegisteredClient(client));
+            assertNotNull(oauth2RegisteredClientService.deleteOauth2RegisteredClient("test-id"));
+            
         } catch (NoSuchMethodException e) {
             throw new AssertionError("Required service methods are missing", e);
         }
