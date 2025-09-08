@@ -66,7 +66,8 @@ GET /findById/{id}
     "clientSecret": "{noop}secret",
     "clientAuthenticationMethods": "client_secret_basic",
     "authorizationGrantTypes": "authorization_code,refresh_token",
-    "redirectUris": "http://localhost:8080/callback",
+    "redirectUris": "http://localhost:8080/callback,https://app.example.com/auth/callback",
+    "postLogoutRedirectUris": "http://localhost:8080/logout,https://app.example.com/logout",
     "scopes": "read,write",
     "clientSettings": "{}",
     "tokenSettings": "{}"
@@ -92,7 +93,8 @@ Content-Type: application/json
   "clientSecret": "{noop}newsecret",
   "clientAuthenticationMethods": "client_secret_basic",
   "authorizationGrantTypes": "authorization_code,refresh_token",
-  "redirectUris": "http://localhost:8080/callback",
+  "redirectUris": "http://localhost:8080/callback,https://app.example.com/auth/callback,https://mobile.example.com/oauth/redirect",
+  "postLogoutRedirectUris": "http://localhost:8080/logout,https://app.example.com/logout",
   "scopes": "read,write",
   "clientSettings": "{}",
   "tokenSettings": "{}"
@@ -151,13 +153,45 @@ DELETE /deleteClient/{id}
 - **clientSecret**: Client secret (should be encoded, e.g., {noop}secret)
 - **clientAuthenticationMethods**: Comma-separated authentication methods
 - **authorizationGrantTypes**: Comma-separated grant types
-- **redirectUris**: Comma-separated redirect URIs
-- **postLogoutRedirectUris**: Comma-separated post logout redirect URIs
+- **redirectUris**: **Comma-separated redirect URIs (supports multiple URIs)**
+  - Example: `"http://localhost:8080/callback,https://app.example.com/auth/callback"`
+  - Multiple URIs are supported to allow clients to redirect to different endpoints
+  - Each URI must be a valid HTTP or HTTPS URL
+  - URIs cannot contain fragments (#)
+- **postLogoutRedirectUris**: **Comma-separated post logout redirect URIs (supports multiple URIs)**
+  - Example: `"http://localhost:8080/logout,https://app.example.com/logout"`
+  - Multiple URIs are supported for flexible logout handling
+  - This field is optional
+  - Each URI must be a valid HTTP or HTTPS URL
+  - URIs cannot contain fragments (#)
 - **scopes**: Comma-separated OAuth2 scopes
 - **clientSettings**: JSON string of client settings
 - **tokenSettings**: JSON string of token settings
 - **clientIdIssuedAt**: Timestamp when client ID was issued (auto-generated)
 - **clientSecretExpiresAt**: Optional expiration time for client secret
+
+### Multiple URI Support
+
+This OAuth2 implementation supports multiple redirect URIs and post-logout redirect URIs for enhanced flexibility:
+
+1. **Multiple Redirect URIs**: Allows OAuth2 clients to register multiple callback URLs, useful for:
+   - Different environments (development, staging, production)
+   - Multiple applications or services using the same OAuth2 client
+   - Different redirect flows (web app, mobile app, etc.)
+
+2. **Multiple Post-Logout Redirect URIs**: Allows clients to specify multiple logout destinations:
+   - Different logout pages for different user types
+   - Multiple applications in a suite that share authentication
+   - Flexible logout flow handling
+
+### URI Validation Rules
+
+- URIs must use HTTP or HTTPS protocol
+- URIs must include a valid hostname
+- URIs cannot contain fragments (#)
+- URIs can include query parameters
+- Multiple URIs are separated by commas without spaces
+- Leading/trailing whitespace in individual URIs is automatically trimmed
 
 ## Error Responses
 

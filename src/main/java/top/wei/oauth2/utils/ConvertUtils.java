@@ -411,8 +411,12 @@ public class ConvertUtils {
         ArrayList<AuthorizationGrantType> authorizationGrantTypesRes = new ArrayList<>();
         authorizationGrantTypesList.forEach(authorizationGrantType -> authorizationGrantTypesRes.add(new AuthorizationGrantType(authorizationGrantType)));
 
-        List<String> redirectUrisList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(oauth2RegisteredClient.getRedirectUris()));
-        List<String> postLogoutRedirectUrisList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(oauth2RegisteredClient.getPostLogoutRedirectUris()));
+        // 规范化URI字符串，移除多余的空白字符
+        String normalizedRedirectUris = OAuth2UriValidationUtils.normalizeUris(oauth2RegisteredClient.getRedirectUris());
+        String normalizedPostLogoutUris = OAuth2UriValidationUtils.normalizeUris(oauth2RegisteredClient.getPostLogoutRedirectUris());
+        
+        List<String> redirectUrisList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(normalizedRedirectUris));
+        List<String> postLogoutRedirectUrisList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(normalizedPostLogoutUris));
         List<String> scopesList = Arrays.asList(StringUtils.commaDelimitedListToStringArray(oauth2RegisteredClient.getScopes()));
 
         return RegisteredClient.withId(oauth2RegisteredClient.getId())
@@ -430,6 +434,38 @@ public class ConvertUtils {
                 .tokenSettings(read(oauth2RegisteredClient.getTokenSettings(), TokenSettingsDto.class).builderTokenSettings())
                 .build();
 
+    }
+
+    /**
+     * 验证 OAuth2RegisteredClient 的URI字段是否有效.
+     *
+     * @param oauth2RegisteredClient 要验证的客户端对象
+     * @return 验证错误列表，为空表示验证通过
+     */
+    public static List<String> validateOauth2RegisteredClientUris(Oauth2RegisteredClient oauth2RegisteredClient) {
+        List<String> errors = new ArrayList<>();
+        
+        // 验证重定向URI
+        List<String> redirectUriErrors = OAuth2UriValidationUtils.validateRedirectUris(oauth2RegisteredClient.getRedirectUris());
+        errors.addAll(redirectUriErrors);
+        
+        // 验证登出重定向URI
+        List<String> postLogoutUriErrors = OAuth2UriValidationUtils.validatePostLogoutRedirectUris(oauth2RegisteredClient.getPostLogoutRedirectUris());
+        errors.addAll(postLogoutUriErrors);
+        
+        // 检查重复的重定向URI
+        List<String> duplicateRedirectUris = OAuth2UriValidationUtils.findDuplicateUris(oauth2RegisteredClient.getRedirectUris());
+        if (!duplicateRedirectUris.isEmpty()) {
+            errors.add("重定向URI中包含重复项: " + String.join(", ", duplicateRedirectUris));
+        }
+        
+        // 检查重复的登出重定向URI
+        List<String> duplicatePostLogoutUris = OAuth2UriValidationUtils.findDuplicateUris(oauth2RegisteredClient.getPostLogoutRedirectUris());
+        if (!duplicatePostLogoutUris.isEmpty()) {
+            errors.add("登出重定向URI中包含重复项: " + String.join(", ", duplicatePostLogoutUris));
+        }
+        
+        return errors;
     }
 
     public static Oauth2AuthorizationConsent springOauth2AuthorizationConsentToOauth2AuthorizationConsent(OAuth2AuthorizationConsent oAuth2AuthorizationConsent) {
