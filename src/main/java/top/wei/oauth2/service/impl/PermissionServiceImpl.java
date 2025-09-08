@@ -11,6 +11,7 @@ import top.wei.oauth2.mapper.PermissionMapper;
 import top.wei.oauth2.model.entity.Permission;
 import top.wei.oauth2.service.PermissionService;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Integer createPermission(Permission permission) {
-        permission.setCreateAt(new Date());
+        permission.setCreateAt(Instant.now());
         permission.setDeleted(false);
         return permissionMapper.insert(permission);
     }
@@ -51,7 +52,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Integer updatePermission(Permission permission) {
-        permission.setUpdateAt(new Date());
+        permission.setUpdateAt(Instant.now());
         return permissionMapper.updateById(permission);
     }
 

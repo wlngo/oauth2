@@ -1,9 +1,10 @@
 package top.wei.oauth2.security.login.captcha.configurer;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.Assert;
 import top.wei.oauth2.security.login.captcha.service.CaptchaService;
@@ -40,7 +41,7 @@ public class CaptchaLoginFilterConfigurer<H extends HttpSecurityBuilder<H>>
 
     @Override
     protected RequestMatcher createLoginProcessingUrlMatcher(String loginProcessingUrl) {
-        return new AntPathRequestMatcher(loginProcessingUrl, "POST");
+        return RegexRequestMatcher.regexMatcher(HttpMethod.POST, loginProcessingUrl);
     }
 
 

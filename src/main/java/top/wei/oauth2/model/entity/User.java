@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -135,11 +136,11 @@ public class User implements Serializable {
      * 记录用户创建时间，自动填充.
      */
     @TableField("created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * 记录用户最后更新时间，自动更新.
      */
     @TableField("updated_at")
-    private Date updatedAt;
+    private Instant updatedAt;
 }

@@ -77,7 +77,7 @@ public class Oauth2ScopeServiceImpl implements Oauth2ScopeService {
 
     private String resolve(HttpServletRequest request) {
         String contextPath = request.getContextPath();
-        return UriComponentsBuilder.fromHttpUrl(UrlUtils.buildFullRequestUrl(request))
+        return UriComponentsBuilder.fromUriString(UrlUtils.buildFullRequestUrl(request))
                 .replacePath(contextPath)
                 .replaceQuery(null)
                 .fragment(null)

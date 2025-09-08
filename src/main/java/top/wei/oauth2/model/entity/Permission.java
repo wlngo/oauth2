@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * 权限表.
@@ -47,7 +47,7 @@ public class Permission implements Serializable {
      * 创建时间.
      */
     @TableField("create_at")
-    private Date createAt;
+    private Instant createAt;
 
     /**
      * 创建人ID.
@@ -59,7 +59,7 @@ public class Permission implements Serializable {
      * 修改时间.
      */
     @TableField("update_at")
-    private Date updateAt;
+    private Instant updateAt;
 
     /**
      * 修改人ID.

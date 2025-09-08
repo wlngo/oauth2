@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * 菜单表.
@@ -82,7 +82,7 @@ public class Menu implements Serializable {
      * 创建时间.
      */
     @TableField("created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * 创建人ID.
@@ -94,7 +94,7 @@ public class Menu implements Serializable {
      * 修改时间.
      */
     @TableField("updated_at")
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * 修改人ID.

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * OAuth2 客户端权限定义表.
@@ -72,8 +72,8 @@ public class Oauth2Scope implements Serializable {
     private Integer sortOrder;
 
     @TableField("created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     @TableField("updated_at")
-    private Date updatedAt;
+    private Instant updatedAt;
 }

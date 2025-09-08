@@ -11,6 +11,7 @@ import top.wei.oauth2.mapper.RoleMapper;
 import top.wei.oauth2.model.entity.Role;
 import top.wei.oauth2.service.RoleService;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Integer createRole(Role role) {
-        role.setCreatedAt(new Date());
+        role.setCreatedAt(Instant.now());
         role.setDeleted(false);
         return roleMapper.insert(role);
     }
@@ -52,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Integer updateRole(Role role) {
-        role.setUpdatedAt(new Date());
+        role.setUpdatedAt(Instant.now());
         return roleMapper.updateById(role);
     }
 

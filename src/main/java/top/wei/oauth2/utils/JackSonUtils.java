@@ -2,6 +2,7 @@ package top.wei.oauth2.utils;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
@@ -30,6 +31,8 @@ public class JackSonUtils {
                     defaultObjectMapper = new ObjectMapper();
                     // 只注册常用模块
                     defaultObjectMapper.registerModule(new JavaTimeModule());
+                    defaultObjectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
+
                     // 如果还有其他通用模块，可以加在这里
                 }
             }

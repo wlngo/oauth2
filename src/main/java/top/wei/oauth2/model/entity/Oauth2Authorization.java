@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
+
 
 
 @Getter
@@ -52,10 +53,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] authorizationCodeValue;
 
     @TableField("authorization_code_issued_at")
-    private Date authorizationCodeIssuedAt;
+    private Instant authorizationCodeIssuedAt;
 
     @TableField("authorization_code_expires_at")
-    private Date authorizationCodeExpiresAt;
+    private Instant authorizationCodeExpiresAt;
 
     @TableField("authorization_code_metadata")
     private byte[] authorizationCodeMetadata;
@@ -67,10 +68,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] accessTokenValue;
 
     @TableField("access_token_issued_at")
-    private Date accessTokenIssuedAt;
+    private Instant accessTokenIssuedAt;
 
     @TableField("access_token_expires_at")
-    private Date accessTokenExpiresAt;
+    private Instant accessTokenExpiresAt;
 
     @TableField("access_token_metadata")
     private byte[] accessTokenMetadata;
@@ -88,10 +89,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] oidcIdTokenValue;
 
     @TableField("oidc_id_token_issued_at")
-    private Date oidcIdTokenIssuedAt;
+    private Instant oidcIdTokenIssuedAt;
 
     @TableField("oidc_id_token_expires_at")
-    private Date oidcIdTokenExpiresAt;
+    private Instant oidcIdTokenExpiresAt;
 
     @TableField("oidc_id_token_metadata")
     private byte[] oidcIdTokenMetadata;
@@ -103,10 +104,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] refreshTokenValue;
 
     @TableField("refresh_token_issued_at")
-    private Date refreshTokenIssuedAt;
+    private Instant refreshTokenIssuedAt;
 
     @TableField("refresh_token_expires_at")
-    private Date refreshTokenExpiresAt;
+    private Instant refreshTokenExpiresAt;
 
     @TableField("refresh_token_metadata")
     private byte[] refreshTokenMetadata;
@@ -118,10 +119,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] userCodeValue;
 
     @TableField("user_code_issued_at")
-    private Date userCodeIssuedAt;
+    private Instant userCodeIssuedAt;
 
     @TableField("user_code_expires_at")
-    private Date userCodeExpiresAt;
+    private Instant userCodeExpiresAt;
 
     @TableField("user_code_metadata")
     private byte[] userCodeMetadata;
@@ -133,10 +134,10 @@ public class Oauth2Authorization implements Serializable {
     private byte[] deviceCodeValue;
 
     @TableField("device_code_issued_at")
-    private Date deviceCodeIssuedAt;
+    private Instant deviceCodeIssuedAt;
 
     @TableField("device_code_expires_at")
-    private Date deviceCodeExpiresAt;
+    private Instant deviceCodeExpiresAt;
 
     @TableField("device_code_metadata")
     private byte[] deviceCodeMetadata;
