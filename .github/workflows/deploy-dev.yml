@@ -11,6 +11,6 @@ jobs:
     runs-on: [ self-hosted,node1 ]
     steps:
       - name: run oauth2
-        run: sh /opt/oauth2/update_or_start_container.sh
+        run: sh /opt/oauth2-service/update_or_start_container.sh
             
           
