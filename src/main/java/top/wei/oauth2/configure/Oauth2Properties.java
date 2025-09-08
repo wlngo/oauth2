@@ -39,5 +39,5 @@ public class Oauth2Properties {
     /**
      * 同意授权页面.
      */
-    private String consentPage;
+    private String consentPageUrl;
 }
