@@ -30,4 +30,14 @@ public class Oauth2Properties {
      * 域名.
      */
     private String domainName;
+
+    /**
+     * 登录页面地址.
+     */
+    private String loginPageUrl;
+
+    /**
+     * 同意授权页面.
+     */
+    private String consentPage;
 }

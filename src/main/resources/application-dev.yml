@@ -55,4 +55,6 @@ oauth2:
   jwkPass: "www.wlngo.top"
   issuer: "https://wlngo.top:9400"
   domainName: "https://*.wlngo.top:[*]"
+  login-page-url: "https://wlngo.top/oauth2-web/login"
+  consent-page: "https://wlngo.top/oauth2-web//oauth2/consent"
 

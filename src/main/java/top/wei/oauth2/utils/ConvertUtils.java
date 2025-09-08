@@ -232,8 +232,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setDeviceCodeValue(stringToByte(tokenDto.getTokenValue()))
                 .setDeviceCodeValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setDeviceCodeIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setDeviceCodeExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setDeviceCodeIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setDeviceCodeExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setDeviceCodeMetadata(stringToByte(tokenDto.getMetadata()));
     }
 
@@ -251,8 +251,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setUserCodeValue(stringToByte(tokenDto.getTokenValue()))
                 .setUserCodeValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setUserCodeIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setUserCodeExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setUserCodeIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setUserCodeExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setUserCodeMetadata(stringToByte(tokenDto.getMetadata()));
     }
 
@@ -269,8 +269,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setRefreshTokenValue(stringToByte(tokenDto.getTokenValue()))
                 .setRefreshTokenValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setRefreshTokenIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setRefreshTokenExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setRefreshTokenIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setRefreshTokenExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setRefreshTokenMetadata(stringToByte(tokenDto.getMetadata()));
     }
 
@@ -287,8 +287,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setOidcIdTokenValue(stringToByte(tokenDto.getTokenValue()))
                 .setOidcIdTokenValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setOidcIdTokenIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setOidcIdTokenExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setOidcIdTokenIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setOidcIdTokenExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setOidcIdTokenMetadata(stringToByte(tokenDto.getMetadata()));
     }
 
@@ -315,8 +315,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setAccessTokenValue(stringToByte(tokenDto.getTokenValue()))
                 .setAccessTokenValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setAccessTokenIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setAccessTokenExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setAccessTokenIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setAccessTokenExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setAccessTokenMetadata(stringToByte(tokenDto.getMetadata()))
                 .setAccessTokenType(accessTokenType)
                 .setAccessTokenScopes(accessTokenScopes);
@@ -337,8 +337,8 @@ public class ConvertUtils {
 
         oauth2Authorization.setAuthorizationCodeValue(stringToByte(tokenDto.getTokenValue()))
                 .setAuthorizationCodeValueIndexSha256(tokenDto.getTokenValue() != null ? DigestUtils.sha256Hex(tokenDto.getTokenValue()) : null)
-                .setAuthorizationCodeIssuedAt(tokenDto.getTokenIssuedAt().toInstant())
-                .setAuthorizationCodeExpiresAt(tokenDto.getTokenExpiresAt().toInstant())
+                .setAuthorizationCodeIssuedAt(tokenDto.getTokenIssuedAt() != null ? tokenDto.getTokenIssuedAt().toInstant() : null)
+                .setAuthorizationCodeExpiresAt(tokenDto.getTokenExpiresAt() != null ? tokenDto.getTokenExpiresAt().toInstant() : null)
                 .setAuthorizationCodeMetadata(stringToByte(tokenDto.getMetadata()));
     }
 

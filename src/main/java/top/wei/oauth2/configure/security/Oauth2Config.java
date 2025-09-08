@@ -100,7 +100,6 @@ public class Oauth2Config {
 
         private final Oauth2Properties oauth2Properties;
 
-
         private final OAuth2AuthorizationService oAuth2AuthorizationService;
 
         private final RegisteredClientRepository registeredClientRepository;
@@ -126,7 +125,7 @@ public class Oauth2Config {
                     new OAuth2AuthorizationServerConfigurer();
             //自定义授权页
             authorizationServerConfigurer.authorizationEndpoint(oAuth2AuthorizationEndpointConfigurer
-                    -> oAuth2AuthorizationEndpointConfigurer.consentPage("/#/oauth2/consent"));
+                    -> oAuth2AuthorizationEndpointConfigurer.consentPage(oauth2Properties.getConsentPage()));
             //todo 撤销token端点 销毁redis key
 //        authorizationServerConfigurer.tokenRevocationEndpoint()
             //获取授权服务器端点
@@ -152,7 +151,7 @@ public class Oauth2Config {
             //Redirect to the login page when exceptions
             http.exceptionHandling(exceptions -> exceptions
                     .defaultAuthenticationEntryPointFor(
-                            new LoginUrlAuthenticationEntryPoint("/#/login"),
+                            new LoginUrlAuthenticationEntryPoint(oauth2Properties.getLoginPageUrl()),
                             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                     )
             );
@@ -216,6 +215,8 @@ public class Oauth2Config {
     @RequiredArgsConstructor
     public static class DefaultUserSecurityConfiguration {
 
+        private final Oauth2Properties oauth2Properties;
+
         private final UserDetailsService userDetailsService;
 
         private final PersistentTokenRepository persistentTokenRepository;
@@ -262,7 +263,7 @@ public class Oauth2Config {
                     .userDetailsService(userDetailsService)
                     .formLogin(httpSecurityFormLoginConfigurer ->
                             httpSecurityFormLoginConfigurer
-                                    .loginPage("/#/login")
+                                    .loginPage(oauth2Properties.getLoginPageUrl())
                                     .loginProcessingUrl("/login")
                                     .successHandler(loginAuthenticationSuccessHandler)
                                     .failureHandler(authenticationFailureHandler))
@@ -286,7 +287,7 @@ public class Oauth2Config {
                                                     .failureHandler(authenticationFailureHandler)
                                     ))
                     .oauth2Login(config ->
-                            config.loginPage("/#/login")
+                            config.loginPage(oauth2Properties.getLoginPageUrl())
                                     .userInfoEndpoint(userInfoEndpointConfigurer -> userInfoEndpointConfigurer
                                             .oidcUserService(customOidcUserService)
                                             .userService(customDefaultOAuth2UserService))
