@@ -61,8 +61,8 @@ public class TokenSettingsDto implements Serializable {
     public TokenSettingsDto builderByTokenSettings(TokenSettings tokenSettings) {
 
         TokenSettingsDto tokenSettingsDto = new TokenSettingsDto();
-        tokenSettingsDto.setAuthorizationCodeTimeToLive(tokenSettingsDto.getAuthorizationCodeTimeToLive())
-                .setAccessTokenTimeToLive(tokenSettingsDto.getAccessTokenTimeToLive())
+        tokenSettingsDto.setAuthorizationCodeTimeToLive(tokenSettings.getAuthorizationCodeTimeToLive())
+                .setAccessTokenTimeToLive(tokenSettings.getAccessTokenTimeToLive())
                 .setAccessTokenFormat(tokenSettings.getAccessTokenFormat().getValue())
                 .setDeviceCodeTimeToLive(tokenSettings.getDeviceCodeTimeToLive())
                 .setIsReuseRefreshTokens(tokenSettings.isReuseRefreshTokens())
