@@ -24,7 +24,11 @@ INSERT INTO t_permission (
       (16, 'user-role:delete', '移除用户角色', NOW(), 0),
       (17, 'user-role:view', '查看用户角色', NOW(), 0),
       (18, 'user:update', '修改用户', NOW(), 0),
-      (19, 'user:view', '查看用户', NOW(), 0)
+      (19, 'user:view', '查看用户', NOW(), 0),
+      (20, 'oauth2-client:create', '创建OAuth2客户端', NOW(), 0),
+      (21, 'oauth2-client:delete', '删除OAuth2客户端', NOW(), 0),
+      (22, 'oauth2-client:update', '更新OAuth2客户端', NOW(), 0),
+      (23, 'oauth2-client:view', '查看OAuth2客户端', NOW(), 0)
     ON DUPLICATE KEY UPDATE permission_id = permission_id;
 
 -- 角色权限关系表（主键 id）
@@ -48,7 +52,11 @@ VALUES
     ('16', '1', '16'),
     ('17', '1', '17'),
     ('18', '1', '18'),
-    ('19', '1', '19')
+    ('19', '1', '19'),
+    ('20', '1', '20'),
+    ('21', '1', '21'),
+    ('22', '1', '22'),
+    ('23', '1', '23')
     ON DUPLICATE KEY UPDATE id = id;
 
 -- 角色表（主键 role_id）
